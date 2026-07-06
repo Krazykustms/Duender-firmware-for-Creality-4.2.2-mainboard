@@ -28,8 +28,7 @@ mkdir -p ~/duender-fw && cd ~/duender-fw
 git clone https://github.com/mriscoc/Ender3V2S1.git upstream/Ender3V2S1
 git -C upstream/Ender3V2S1 checkout New-Year-2025
 
-git clone https://github.com/mriscoc/Special_Configurations.git upstream/Special_Configurations
-git -C upstream/Special_Configurations checkout T13
+git clone -b main https://github.com/mriscoc/Special_Configurations.git upstream/Special_Configurations
 
 git clone https://github.com/Krazykustms/Duender-firmware-for-Creality-4.2.2-mainboard.git duender-config
 cd duender-config
@@ -38,7 +37,7 @@ cd duender-config
 bash scripts/ci/generate-config.sh
 
 cd upstream/Ender3V2S1
-pio run
+pio run -e STM32F103RE_creality
 ```
 
 ### Use your measured values locally
@@ -65,16 +64,20 @@ Add a one-line comment in the PR body: toolhead variant, CR Touch mount, Duender
 
 ## Upstream version policy
 
-CI pins by default:
+CI pins by default (beta **`0.1.0-beta.1`**):
 
 | Repo | Ref | Why |
 |------|-----|-----|
 | [Ender3V2S1](https://github.com/mriscoc/Ender3V2S1) | `New-Year-2025` | Current Mriscoc professional branch |
-| [Special_Configurations](https://github.com/mriscoc/Special_Configurations) | `T13` | Sprite thermistor + 422 BLT UBL MPC |
+| [Special_Configurations](https://github.com/mriscoc/Special_Configurations) | `main` | Matches New-Year-2025; legacy `T13` tag is too old |
 
-Bump these in `.github/workflows/build-firmware.yml` when you validate a newer Mriscoc release. Mention the change in the PR.
+Build environment: **`STM32F103RE_creality`** (512K Creality 4.2.2 — correct for GD32F303RET6 Neo donors).
+
+Bump refs in `.github/workflows/build-firmware.yml` and [config/firmware-version.json](config/firmware-version.json) when you validate a newer Mriscoc release.
 
 ## Releases
+
+**Beta `0.1.0-beta.1`:** documented in [docs/beta.md](docs/beta.md). CI uploads artifacts; not yet a GitHub Release tag.
 
 Firmware binaries are **not** auto-published to GitHub Releases yet. Download build artifacts from the [Actions](https://github.com/Krazykustms/Duender-firmware-for-Creality-4.2.2-mainboard/actions) tab.
 

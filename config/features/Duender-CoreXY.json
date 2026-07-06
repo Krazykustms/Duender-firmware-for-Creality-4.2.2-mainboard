@@ -6,6 +6,12 @@
       "comment": "Duender MGN9H CoreXY kinematics"
     },
     {
+      "op": "CustomVal",
+      "searchfor": "CONFIGURATION_H_VERSION",
+      "value": "02010300",
+      "comment": "Match New-Year-2025 Marlin (legacy T13 tag used 02010200)"
+    },
+    {
       "op": "Custom",
       "mask": "{.*}",
       "searchfor": "DEFAULT_AXIS_STEPS_PER_UNIT",
@@ -55,8 +61,51 @@
       "searchfor": "NOZZLE_TO_PROBE_OFFSET",
       "value": "{ ___X___, ___Y___, 0 }",
       "comment": "Measure CR Touch mount on Duender toolhead"
+    },
+    {
+      "op": "Replace",
+      "searchfor": "DEFAULT_BED_KP",
+      "value": "DEFAULT_bedKp"
+    },
+    {
+      "op": "Replace",
+      "searchfor": "DEFAULT_BED_KI",
+      "value": "DEFAULT_bedKi"
+    },
+    {
+      "op": "Replace",
+      "searchfor": "DEFAULT_BED_KD",
+      "value": "DEFAULT_bedKd"
     }
   ],
-  "Configuration_adv.h": [],
-  "Version.h": []
+  "Configuration_adv.h": [
+    {
+      "op": "CustomVal",
+      "searchfor": "CONFIGURATION_ADV_H_VERSION",
+      "value": "02010300",
+      "comment": "Match New-Year-2025 Marlin"
+    }
+  ],
+  "Version.h": [
+    {
+      "op": "Custom",
+      "mask": "{.*}",
+      "searchfor": "MACHINE_NAME",
+      "value": "\"Duender MGN9H beta\"",
+      "comment": "LCD boot name — beta channel"
+    },
+    {
+      "op": "Replace",
+      "searchfor": "Duender-422-BLTUBL-MPC-T13, based on bugfix-2.1.x",
+      "value": "Duender-422-BLTUBL-MPC-T13-beta.1 CoreXY, New-Year-2025"
+    }
+  ],
+  "platformio.ini": [
+    {
+      "op": "Replace",
+      "searchfor": "default_envs = STM32F103RC_creality",
+      "value": "default_envs = STM32F103RE_creality",
+      "comment": "512K Creality 4.2.2 (GD32F303RET6 uses this target — not STM32F103RC 256K)"
+    }
+  ]
 }

@@ -40,6 +40,14 @@ fi
 
 cp "$CONFIGS_DIR/$CONFIG_NAME/Configuration.h" "$FIRMWARE_DIR/Marlin/"
 cp "$CONFIGS_DIR/$CONFIG_NAME/Configuration_adv.h" "$FIRMWARE_DIR/Marlin/"
+cp "$CONFIGS_DIR/$CONFIG_NAME/Version.h" "$FIRMWARE_DIR/Marlin/"
 cp "$CONFIGS_DIR/$CONFIG_NAME/platformio.ini" "$FIRMWARE_DIR/"
+
+# Marlin 2.1.3+ preflight expects ANY/ALL instead of EITHER/BOTH in config headers.
+for f in Configuration.h Configuration_adv.h; do
+  if [[ -f "$FIRMWARE_DIR/Marlin/$f" ]]; then
+  sed -i 's/BOTH(/ALL(/g; s/EITHER(/ANY(/g' "$FIRMWARE_DIR/Marlin/$f"
+  fi
+done
 
 echo "Applied $CONFIG_NAME to $FIRMWARE_DIR"

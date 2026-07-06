@@ -12,12 +12,14 @@ Legend: `→` = change from stock Ender3V2-422-BLTUBL-MPC value.
 ## Machine identity
 
 ```c
-// CUSTOM_MACHINE_NAME
-→ "Duender-MGN9H-422-BLTUBL-MPC"
+// CUSTOM_MACHINE_NAME / Version.h MACHINE_NAME (beta overlay)
+→ "Duender MGN9H beta"
 
 // MOTHERBOARD — unchanged
 #define MOTHERBOARD BOARD_CREALITY_V4   // 4.2.2
 ```
+
+**Build:** `pio run -e STM32F103RE_creality` (512K — GD32F303RET6 Neo boards use this env name).
 
 ---
 

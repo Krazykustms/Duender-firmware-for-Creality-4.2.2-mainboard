@@ -14,7 +14,7 @@ on:
       mriscoc_config_ref:
         description: mriscoc/Special_Configurations git ref
         required: false
-        default: T13
+        default: main
       use_measured_config:
         description: Use Duender-CoreXY.json (fails CI if ___MEASURE___ unset)
         type: boolean
@@ -27,8 +27,10 @@ concurrency:
 
 env:
   CONFIG_NAME: Duender-422-BLTUBL-MPC-T13
+  PIO_ENV: STM32F103RE_creality
+  FIRMWARE_VERSION: 0.1.0-beta.1
   MRISCOC_FIRMWARE_REF: ${{ github.event.inputs.mriscoc_firmware_ref || 'New-Year-2025' }}
-  MRISCOC_CONFIG_REF: ${{ github.event.inputs.mriscoc_config_ref || 'T13' }}
+  MRISCOC_CONFIG_REF: ${{ github.event.inputs.mriscoc_config_ref || 'main' }}
 
 jobs:
   build:
@@ -85,18 +87,18 @@ jobs:
 
       - name: Build firmware
         working-directory: upstream/Ender3V2S1
-        run: pio run
+        run: pio run -e ${{ env.PIO_ENV }}
 
       - name: Collect firmware binary
         run: |
           mkdir -p dist
-          find upstream/Ender3V2S1/.pio/build -name '*.bin' -exec cp -v {} dist/ \;
+          find upstream/Ender3V2S1/.pio/build/${{ env.PIO_ENV }} -name '*.bin' -exec cp -v {} dist/Duender-422-BLTUBL-MPC-T13-CoreXY-${{ env.FIRMWARE_VERSION }}.bin \;
           ls -la dist/
 
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v4
         with:
-          name: duender-firmware-${{ github.run_number }}-${{ github.sha }}
+          name: duender-firmware-${{ env.FIRMWARE_VERSION }}-${{ github.run_number }}
           path: dist/*.bin
           if-no-files-found: error
           retention-days: 30
@@ -111,6 +113,8 @@ jobs:
             echo "| Ender3V2S1 ref | \`${{ env.MRISCOC_FIRMWARE_REF }}\` |"
             echo "| Special_Configurations ref | \`${{ env.MRISCOC_CONFIG_REF }}\` |"
             echo "| Config profile | \`${{ env.CONFIG_NAME }}\` |"
+            echo "| Build env | \`${{ env.PIO_ENV }}\` (512K Creality 4.2.2 / GD32F303 Neo) |"
+            echo "| Firmware version | \`${{ env.FIRMWARE_VERSION }}\` (beta) |"
             echo ""
             echo "Download the \`.bin\` from the workflow **Artifacts** section."
           } >> "$GITHUB_STEP_SUMMARY"

@@ -10,6 +10,8 @@ Custom [Mriscoc Professional](https://github.com/mriscoc/Ender3V2S1) firmware fo
 
 Builds on the Mriscoc `Ender3V2-422-BLTUBL-MPC` profile + `T13` (Sprite thermistor) + `Duender-CoreXY` overlay.
 
+**Firmware channel:** **beta** `0.1.0-beta.1` — see [docs/beta.md](docs/beta.md) and [config/firmware-version.json](config/firmware-version.json). First config-complete build validated locally (compile + 512K `STM32F103RE_creality` target for GD32F303 Neo boards). Placeholder bed/travel values — measure your Duender before trusting limits.
+
 **Contributing:** see [CONTRIBUTING.md](CONTRIBUTING.md). Download CI-built `.bin` files from the [Actions](https://github.com/Krazykustms/Duender-firmware-for-Creality-4.2.2-mainboard/actions) tab (artifacts use placeholder bed dimensions until you measure yours).
 
 ## Hardware summary
@@ -20,7 +22,7 @@ Builds on the Mriscoc `Ender3V2-422-BLTUBL-MPC` profile + `T13` (Sprite thermist
 | **Target machine** | Duender PIN v6 MGN9H CoreXY |
 | Kinematics | CoreXY |
 | Mainboard | Creality 4.2.2 (`BOARD_CREALITY_V4`) |
-| MCU | GD32F303RET6 (STM32F103-compatible; same firmware target) |
+| MCU | GD32F303RET6 (typical Neo) — build with **`STM32F103RE_creality`** (512K env name, not the chip vendor) |
 | Probe | CR Touch (BLTouch-compatible) |
 | Extruder | Creality Sprite (direct drive) → use **`T13`** thermistor profile |
 | Z axis | Dual leadscrew steppers, **parallel-wired** to Z driver |
@@ -49,16 +51,19 @@ Prebuilt binary you may already run: `Ender3V2-422-BLTUBL-MPC`. For Duender + Sp
 ├── README.md
 ├── docs/
 │   ├── wiring.md              # Harness, driver slots, probe, power
-│   └── build.md               # Compile and flash workflow
+│   ├── build.md               # Compile and flash workflow
+│   └── beta.md                # Beta channel, version, flash caveats
 ├── .github/
 │   ├── workflows/build-firmware.yml        # PlatformIO CI
 │   ├── ISSUE_TEMPLATE/                     # Bug, build, config help
 │   └── pull_request_template.md
 ├── config/
+│   ├── firmware-version.json  # Machine-readable beta/stable version
 │   ├── Configuration.h.diff-outline.md   # What to change vs stock Mriscoc base
 │   └── features/
 │       ├── Duender-CoreXY.json             # Your measured values (___MEASURE___)
 │       └── Duender-CoreXY-CI.json          # CI-safe placeholder dimensions
+├── dist/README.md             # Where local .bin builds go (gitignored)
 ├── scripts/ci/generate-config.sh           # Local + CI config generator
 ├── CONTRIBUTING.md
 └── .gitignore
@@ -69,7 +74,13 @@ Firmware sources are **not vendored** here. Clone [mriscoc/Ender3V2S1](https://g
 ## Quick start
 
 1. Read [docs/wiring.md](docs/wiring.md) and verify harness against your build.
-2. Generate a base config from [mriscoc/Special_Configurations](https://github.com/mriscoc/Special_Configurations):
+2. Generate a base config from [mriscoc/Special_Configurations](https://github.com/mriscoc/Special_Configurations) (`main` branch):
+
+   ```bash
+   bash scripts/ci/generate-config.sh
+   ```
+
+   Or manually with CreateConfigs:
 
    ```python
    import CreateConfigs
@@ -82,7 +93,7 @@ Firmware sources are **not vendored** here. Clone [mriscoc/Ender3V2S1](https://g
    Place `Duender-CoreXY.json` in `_features/` before running (see [config/features/](config/features/)).
 
 3. Apply remaining edits from [config/Configuration.h.diff-outline.md](config/Configuration.h.diff-outline.md) — especially bed size, probe offset, and motor directions after first homing tests.
-4. Build and flash per [docs/build.md](docs/build.md).
+4. Build and flash per [docs/build.md](docs/build.md) (beta: [docs/beta.md](docs/beta.md)).
 
 ## Base configuration
 

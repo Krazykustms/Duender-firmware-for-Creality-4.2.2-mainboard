@@ -1,0 +1,21 @@
+{
+  "channel": "beta",
+  "version": "0.1.0-beta.1",
+  "profile": "Duender-422-BLTUBL-MPC-T13",
+  "machine_name": "Duender MGN9H beta",
+  "build_env": "STM32F103RE_creality",
+  "upstream": {
+    "Ender3V2S1": "New-Year-2025",
+    "Special_Configurations": "main"
+  },
+  "validated": {
+    "date": "2026-07-06",
+    "platform": "Windows 11, PlatformIO 6.x, short path (C:\\fw)",
+    "mcu_note": "Built for 512K Creality 4.2.2 (STM32F103RE_creality). Flash-tested target for GD32F303RET6 Neo boards."
+  },
+  "caveats": [
+    "CI placeholder bed/travel/probe values — measure your Duender before trusting limits",
+    "Motor invert flags not set — verify after first CoreXY homing",
+    "Not a tagged GitHub Release yet — beta smoke-test on hardware before daily use"
+  ]
+}

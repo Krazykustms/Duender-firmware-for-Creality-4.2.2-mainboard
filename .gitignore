@@ -1,4 +1,5 @@
 # PlatformIO / Marlin build trees (clone upstream separately)
+upstream/
 .pio/
 .pioenvs/
 .piolibdeps/

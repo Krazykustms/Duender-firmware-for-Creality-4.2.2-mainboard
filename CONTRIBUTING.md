@@ -88,4 +88,4 @@ Only attach `.bin` files to a Release after you have flashed and smoke-tested th
 
 ## License
 
-By contributing, you agree your changes are licensed under the same [GPL-3.0](LICENSE) as this repository. Marlin/Mriscoc remain GPL-2.0+.
+By contributing, you agree your changes are licensed under [GPL-2.0](LICENSE), consistent with Marlin and Mriscoc upstream.

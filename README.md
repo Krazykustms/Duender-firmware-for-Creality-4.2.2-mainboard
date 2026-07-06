@@ -116,4 +116,4 @@ Fill these in after assembly (tracked in the diff outline):
 
 ## License
 
-GPL-3.0 (see [LICENSE](LICENSE)). Marlin and Mriscoc firmware are GPL-2.0+. Duender mechanical designs are GPL-2.0 by Irbis3D.
+GPL-2.0 (see [LICENSE](LICENSE)). Aligns with [Marlin](https://github.com/MarlinFirmware/Marlin), [Mriscoc Professional](https://github.com/mriscoc/Ender3V2S1), and [Duender](https://github.com/Irbis3D/Duender) (all GPL-2.0).

@@ -1,0 +1,61 @@
+name: Build / CI failure
+description: GitHub Action or local PlatformIO build failed
+title: "[Build]: "
+labels: ["build"]
+body:
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where did the build fail?
+      options:
+        - GitHub Actions (this repo)
+        - Local PlatformIO
+        - CreateConfigs.py / config generation
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      placeholder: e.g. Windows 11, Ubuntu 24.04
+    validations:
+      required: true
+
+  - type: input
+    id: commit
+    attributes:
+      label: Git commit or PR number
+      placeholder: e.g. abc1234 or PR #2
+    validations:
+      required: false
+
+  - type: textarea
+    id: log
+    attributes:
+      label: Error log
+      description: Last ~50 lines of the failure, or link to the failed Actions run
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps you ran
+      placeholder: |
+        git clone ...
+        bash scripts/ci/generate-config.sh
+        pio run
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I used short clone paths (PlatformIO path-length issues on Windows)
+          required: false
+        - label: I searched existing issues for a duplicate
+          required: true

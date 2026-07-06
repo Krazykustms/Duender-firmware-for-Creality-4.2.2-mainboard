@@ -1,0 +1,116 @@
+name: Build firmware
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      mriscoc_firmware_ref:
+        description: mriscoc/Ender3V2S1 git ref (branch or tag)
+        required: false
+        default: New-Year-2025
+      mriscoc_config_ref:
+        description: mriscoc/Special_Configurations git ref
+        required: false
+        default: T13
+      use_measured_config:
+        description: Use Duender-CoreXY.json (fails CI if ___MEASURE___ unset)
+        type: boolean
+        required: false
+        default: false
+
+concurrency:
+  group: firmware-build-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CONFIG_NAME: Duender-422-BLTUBL-MPC-T13
+  MRISCOC_FIRMWARE_REF: ${{ github.event.inputs.mriscoc_firmware_ref || 'New-Year-2025' }}
+  MRISCOC_CONFIG_REF: ${{ github.event.inputs.mriscoc_config_ref || 'T13' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout Duender config repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Checkout mriscoc/Ender3V2S1
+        uses: actions/checkout@v4
+        with:
+          repository: mriscoc/Ender3V2S1
+          ref: ${{ env.MRISCOC_FIRMWARE_REF }}
+          path: upstream/Ender3V2S1
+
+      - name: Checkout mriscoc/Special_Configurations
+        uses: actions/checkout@v4
+        with:
+          repository: mriscoc/Special_Configurations
+          ref: ${{ env.MRISCOC_CONFIG_REF }}
+          path: upstream/Special_Configurations
+
+      - name: Select Duender feature overlay
+        run: |
+          if [ "${{ github.event.inputs.use_measured_config }}" = "true" ]; then
+            cp config/features/Duender-CoreXY.json \
+              upstream/Special_Configurations/_features/Duender-CoreXY.json
+          else
+            cp config/features/Duender-CoreXY-CI.json \
+              upstream/Special_Configurations/_features/Duender-CoreXY.json
+          fi
+
+      - name: Generate Marlin configuration
+        run: bash scripts/ci/generate-config.sh
+
+      - name: Cache PlatformIO
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.platformio
+          key: platformio-${{ runner.os }}-${{ hashFiles('upstream/Ender3V2S1/platformio.ini') }}
+          restore-keys: |
+            platformio-${{ runner.os }}-
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Build firmware
+        working-directory: upstream/Ender3V2S1
+        run: pio run
+
+      - name: Collect firmware binary
+        run: |
+          mkdir -p dist
+          find upstream/Ender3V2S1/.pio/build -name '*.bin' -exec cp -v {} dist/ \;
+          ls -la dist/
+
+      - name: Upload firmware artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: duender-firmware-${{ github.run_number }}-${{ github.sha }}
+          path: dist/*.bin
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Summary
+        run: |
+          {
+            echo "### Firmware build"
+            echo ""
+            echo "| Input | Value |"
+            echo "|-------|-------|"
+            echo "| Ender3V2S1 ref | \`${{ env.MRISCOC_FIRMWARE_REF }}\` |"
+            echo "| Special_Configurations ref | \`${{ env.MRISCOC_CONFIG_REF }}\` |"
+            echo "| Config profile | \`${{ env.CONFIG_NAME }}\` |"
+            echo ""
+            echo "Download the \`.bin\` from the workflow **Artifacts** section."
+          } >> "$GITHUB_STEP_SUMMARY"

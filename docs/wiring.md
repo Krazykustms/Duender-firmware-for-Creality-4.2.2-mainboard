@@ -1,0 +1,132 @@
+# Wiring notes — Duender MGN9H on Creality 4.2.2
+
+Wiring map for this firmware repo. Pin names follow Marlin `pins_CREALITY_V4.h` (4.2.2 / 4.2.7 family).
+
+> **MCU note:** Many 4.2.2 boards ship with **GD32F303RET6** instead of STM32F103RET6. Pinout and Mriscoc `422` builds are the same; flash the standard 4.2.2 binary unless you have verified a different bootloader layout.
+
+## Driver slot assignment (Duender CoreXY)
+
+The 4.2.2 board has four integrated TMC2225 drivers. On CoreXY, **firmware X/Y axes map to belt motors**, not cartesian gantries.
+
+| Board label | Marlin axis | Duender function | Cable |
+|-------------|-------------|------------------|-------|
+| **X** | `X` | CoreXY motor **A** (X+Y belt) | 4-pin motor, Duender XY harness |
+| **Y** | `Y` | CoreXY motor **B** (X−Y belt) | 4-pin motor, Duender XY harness |
+| **Z** | `Z` | **Both** Z steppers (parallel) | Y-splitter or spliced harness → single Z port |
+| **E** | `E0` | Sprite extruder stepper | Sprite motor extension cable |
+
+### Dual Z in parallel (one driver)
+
+Both Z motors share the **Z** driver socket:
+
+- Wire **step**, **dir**, and **enable** in parallel (A+/A− and B+/B− matched per motor).
+- Use identical motors and leadscrew pitch.
+- **No second Z driver** — do **not** enable `NUM_Z_STEPPER_DRIVERS` / `Z_STEPPER_ALIGN` unless you add a second driver later.
+- Level the bed mechanically (couplers, shims, or one-time gantry trim) before relying on mesh/UBL.
+
+```
+Z driver (4.2.2)          Motor L          Motor R
+  STEP  ────────────────┬─────── STEP
+  DIR   ────────────────┼─────── DIR
+  EN    ────────────────┴─────── EN
+  A+/A− ─── motor L ───
+  B+/B− ─── motor R ───
+```
+
+## Stepper signal pins (4.2.2 reference)
+
+| Axis | STEP | DIR | ENABLE (shared) |
+|------|------|-----|-----------------|
+| X | PC2 | PB9 | PC3 |
+| Y | PB8 | PB7 | PC3 |
+| Z | PB6 | PB5 | PC3 |
+| E0 | PB4 | PB3 | PC3 |
+
+If an axis moves the wrong way, fix in firmware (`INVERT_*_DIR`) or swap **one** motor coil pair — not both.
+
+## Endstops
+
+Stock Ender-3 style **NC switches to GND** (pull-up enabled in firmware).
+
+| Function | Typical 4.2.2 pin | Duender |
+|----------|-------------------|---------|
+| X min | PA5 | Front-left X home switch |
+| Y min | PA6 | Front-left Y home switch |
+| Z min | PA7 | **Not used for homing** when CR Touch probes Z |
+
+Duender homes X and Y to **minimum** (`X_HOME_DIR -1`, `Y_HOME_DIR -1`). Confirm switch placement matches your frame corner.
+
+## CR Touch (BL_T port)
+
+Connect to the dedicated **BLTouch** header on 4.2.2:
+
+| CR Touch wire | 4.2.2 / Marlin | Notes |
+|---------------|----------------|-------|
+| Brown / GND | GND | |
+| Red / +5V | 5V | |
+| Orange / yellow control | PB0 (`SERVO0`) | Deploy/stow |
+| White / signal | PA7 (`Z_MIN_PIN`) | Probe trigger |
+
+Firmware: `#define BLTOUCH` (already in BLTUBL base). Z homing uses probe via `Z_SAFE_HOMING` at bed center — same as stock Mriscoc CRTouch builds.
+
+**Mounting:** Measure and set `NOZZLE_TO_PROBE_OFFSET { x, y, z }` after installing the probe on your Duender toolhead. Stock Ender mount offsets do **not** apply.
+
+## Sprite extruder
+
+| Function | 4.2.2 terminal | Notes |
+|----------|----------------|-------|
+| E stepper | E driver (above) | |
+| Hotend heater | E0 heater screw terminal | |
+| Hotend thermistor | TH0 | Use sensor **type 13** (`T13` profile) |
+| Part cooling fan | FAN0 | |
+| Hotend fan | FAN1 (always-on in firmware) | |
+
+**E-steps starting value:** `424.9` mm⁻¹ (Creality Sprite reference). Calibrate with a 120 mm extrusion test; store with `M500`.
+
+**Thermistor:** Sprite / Sprite Pro → `TEMP_SENSOR_0 13` (100k β3950, 300 °C max in T13 profile).
+
+## Heated bed
+
+| Function | Terminal |
+|----------|----------|
+| Bed heater | Bed HE |
+| Bed thermistor | TB |
+
+Stock Ender thermistor type **1** (100k EPCOS) unless you changed the sensor.
+
+## Display (keep Mriscoc UI)
+
+Leave the **stock Ender-3 V2 DWIN** ribbon on **EXP1 / EXP3** as on the original Ender-3 V2. No wiring change required for Mriscoc Professional.
+
+| Setting | Value |
+|---------|-------|
+| `SERIAL_PORT` | `1` (USART1 — display channel on Creality V4) |
+| `BAUDRATE` | `250000` |
+
+## Power and safety
+
+- **Mains:** Use the original Creality PSU or equivalent 24 V supply sized for bed + hotend + three XY motors.
+- **Power off** for all harness work.
+- **Probe + hotend fan + CR Touch** share the board's 5 V budget — use the Creality BL_T harness; avoid long unshielded probe runs parallel to stepper cables.
+- **Frame ground:** Earth the PSU chassis to the frame per Duender / Ender practice.
+
+## Pre-flight checklist
+
+- [ ] XY motors on **X** and **Y** drivers (not Z/E)
+- [ ] Both Z motors on **Z** driver only, phases matched
+- [ ] Sprite on **E**, thermistor on **TH0**
+- [ ] CR Touch on **BL_T** port (not endstop-only wiring)
+- [ ] X/Y endstops hit **before** carriage crashes at front-left
+- [ ] Bed thermistor and heater secure — no strain on screw terminals
+- [ ] Display ribbon seated; printer boots to Mriscoc UI
+
+## First power-on (before trusting homing)
+
+1. Power on; confirm UI and temperatures read sane.
+2. Disable steppers; hand-move gantry to center.
+3. `M119` — endstops idle **open**, triggered when pressed.
+4. Home **X only** (`G28 X`) at low feedrate; verify direction toward X switch.
+5. Home **Y only**; verify direction toward Y switch.
+6. Fix `INVERT_X_DIR` / `INVERT_Y_DIR` if either axis runs away.
+7. Deploy CR Touch (`M280 P0 S10` / LCD) before first **Z** home.
+8. Run `G28` full home; set probe Z-offset (`M851 Z`) and `M500`.

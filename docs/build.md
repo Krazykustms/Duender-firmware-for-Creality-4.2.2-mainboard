@@ -1,0 +1,113 @@
+# Build and flash — Mriscoc Professional for Duender
+
+## Prerequisites
+
+- [PlatformIO](https://platformio.org/) (VS Code extension or CLI)
+- Python 3 (for `CreateConfigs.py` only)
+- USB data cable — Creality 4.2.2 uses **USB-serial on USART1** via the display cable, or direct USB depending on your board revision
+
+Keep clone paths **short** (PlatformIO fails on deep Windows paths).
+
+## 1. Clone upstream firmware
+
+```bash
+git clone https://github.com/mriscoc/Ender3V2S1.git
+cd Ender3V2S1
+git checkout professional   # or the release tag you intend to ship
+```
+
+## 2. Generate configuration
+
+Clone [Special_Configurations](https://github.com/mriscoc/Special_Configurations) (use the `T13` branch for Sprite thermistor support).
+
+**Recommended — use the helper script:**
+
+```bash
+# From this repo root, with upstream/ clones as in CONTRIBUTING.md
+bash scripts/ci/generate-config.sh
+```
+
+This copies `Duender-CoreXY-CI.json` by default (compiles without measured bed size). For your machine profile:
+
+```bash
+export FEATURE_FILE="$PWD/config/features/Duender-CoreXY.json"
+bash scripts/ci/generate-config.sh
+```
+
+**Manual alternative:**
+
+Copy `config/features/Duender-CoreXY.json` into `Special_Configurations/_features/`, then:
+
+```bash
+cd Special_Configurations
+python -c "import CreateConfigs; CreateConfigs.Generate('Duender-422-BLTUBL-MPC-T13', ['Ender3V2','422','BLT','UBL','MPC','T13','Duender-CoreXY'])"
+```
+
+Copy outputs into the firmware tree:
+
+| From generated folder | To |
+|-----------------------|-----|
+| `Configuration.h` | `Ender3V2S1/Marlin/Configuration.h` |
+| `Configuration_adv.h` | `Ender3V2S1/Marlin/Configuration_adv.h` |
+| `platformio.ini` | `Ender3V2S1/platformio.ini` |
+
+### CI builds
+
+Every push to `main` runs [.github/workflows/build-firmware.yml](../.github/workflows/build-firmware.yml). Download the `.bin` from the workflow **Artifacts** section. CI uses placeholder dimensions from `Duender-CoreXY-CI.json` — flash on hardware only after you verify travel limits are safe.
+
+## 3. Apply manual edits
+
+Work through [config/Configuration.h.diff-outline.md](../config/Configuration.h.diff-outline.md):
+
+- Bed dimensions (after measuring)
+- `NOZZLE_TO_PROBE_OFFSET`
+- Motor invert flags after direction tests
+- Optional: raise `DEFAULT_MAX_ACCELERATION` gradually after Input Shaping
+
+## 4. Compile
+
+```bash
+cd Ender3V2S1
+pio run -e STM32F103RET6_creality
+```
+
+Environment name may vary slightly by Mriscoc release — use the `422` / `creality` target that matches your `platformio.ini`.
+
+## 5. Flash
+
+### SD card (typical)
+
+1. Rename firmware to a unique `*.bin` (e.g. `Duender-422-20260706.bin`).
+2. Copy to FAT32 microSD root.
+3. Power off, insert card, power on.
+4. Flash takes ~30 s; screen may go blank — wait for reboot.
+
+### STM32 DFU / serial
+
+Follow [Mriscoc install wiki](https://github.com/mriscoc/Ender3V2S1/wiki/How-to-install-the-firmware) if SD update fails.
+
+## 6. Post-flash calibration
+
+Order recommended by Mriscoc:
+
+1. **MPC** autotune (hotend + bed) — save (`M500`)
+2. **Probe Z-offset** — paper test or feeler, `M851 Z`, `M500`
+3. **UBL** — `G29 P1` / wizard, `M500`
+4. **E-steps** — extrusion test starting from `424.9`, `M92 E…`, `M500`
+5. **Input Shaping** (if enabled in your branch) — resonance test, save
+6. **Linear Advance** — tower test if `LA` feature enabled
+
+## 7. Store settings in repo (optional)
+
+Export working EEPROM values to a text snippet in `config/saved-settings/` for rebuilds — **never** commit machine-specific mesh blobs unless you intend to.
+
+## Troubleshooting
+
+| Symptom | Check |
+|---------|-------|
+| Axis runs wrong way on homing | `INVERT_X_DIR` / `INVERT_Y_DIR` |
+| Diagonal moves only, no pure X/Y | `COREXY` not enabled |
+| Z motors fight each other | Parallel wiring phase match; mechanical sync |
+| Probe error / deploy fail | CR Touch on BL_T port; 5V not 3.3V |
+| UI blank after flash | Wrong display profile — keep `Ender3V2` base, don't swap to S1 UI |
+| Temps max out at 275 | Confirm `T13` profile; `HEATER_0_MAXTEMP 300` |

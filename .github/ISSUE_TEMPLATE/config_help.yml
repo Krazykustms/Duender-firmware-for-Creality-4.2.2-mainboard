@@ -1,0 +1,68 @@
+name: Config / calibration help
+description: Homing direction, probe offset, bed size, E-steps, or UBL setup
+title: "[Config]: "
+labels: ["question", "config"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        We can help tune `Configuration.h` — fill in what you know. It's OK if bed size is still **TBD**.
+
+  - type: dropdown
+    id: topic
+    attributes:
+      label: Topic
+      multiple: true
+      options:
+        - COREXY homing / invert dirs
+        - CR Touch / Z offset / UBL
+        - Bed size / travel limits
+        - Sprite E-steps / temperatures (T13)
+        - Dual Z parallel
+        - Input Shaping / acceleration
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: hardware
+    attributes:
+      label: Hardware summary
+      value: |
+        - Duender: PIN v6 MGN9H
+        - Board: Creality 4.2.2 (from Ender-3 V2 Neo)
+        - Probe: CR Touch
+        - Extruder: Sprite
+        - Z: dual steppers parallel on Z driver
+    validations:
+      required: true
+
+  - type: textarea
+    id: measurements
+    attributes:
+      label: Measurements (if any)
+      description: Bed size, Z height, probe offset, or "not measured yet"
+      placeholder: |
+        X_BED_SIZE: TBD
+        Z_MAX_POS: TBD
+        NOZZLE_TO_PROBE_OFFSET: TBD
+        INVERT_X_DIR: false (axis runs away on homing)
+    validations:
+      required: false
+
+  - type: textarea
+    id: question
+    attributes:
+      label: What do you need help with?
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I read docs/wiring.md and Configuration.h.diff-outline.md
+          required: false
+        - label: I searched existing issues
+          required: true

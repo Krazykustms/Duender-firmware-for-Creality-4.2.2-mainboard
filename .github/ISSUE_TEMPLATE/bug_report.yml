@@ -1,0 +1,93 @@
+name: Firmware bug
+description: Crash, wrong motion, probe error, or unexpected behavior after flashing
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Include enough detail to reproduce. Attach a photo of the **About** screen if the UI still works.
+
+  - type: dropdown
+    id: firmware_source
+    attributes:
+      label: Firmware source
+      options:
+        - GitHub Actions artifact from this repo
+        - Built locally from this repo
+        - Stock Mriscoc Ender3V2-422-BLTUBL-MPC (no Duender changes)
+        - Other / unsure
+    validations:
+      required: true
+
+  - type: input
+    id: mriscoc_ref
+    attributes:
+      label: Mriscoc ref (if known)
+      placeholder: e.g. New-Year-2025, 20240122
+    validations:
+      required: false
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Flash firmware ...
+        2. G28 ...
+        3. Start print ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Exact on-screen message, axis direction, sounds, etc.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: when
+    attributes:
+      label: When does it happen?
+      multiple: true
+      options:
+        - Boot / UI
+        - X homing
+        - Y homing
+        - Z homing / probing
+        - Heating
+        - First layer / print
+        - Mid-print
+        - Other
+    validations:
+      required: false
+
+  - type: textarea
+    id: config_snippet
+    attributes:
+      label: Relevant config (optional)
+      description: Paste `M503`, probe offset (`M851`), or edited defines from Configuration.h
+      render: text
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: COREXY is enabled in my Configuration.h
+          required: false
+        - label: CR Touch is on the BL_T port (not endstop-only wiring)
+          required: false
+        - label: I searched existing issues for a duplicate
+          required: true

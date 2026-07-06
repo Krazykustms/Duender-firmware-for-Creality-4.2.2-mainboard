@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Mriscoc Professional wiki
+    url: https://github.com/mriscoc/Ender3V2S1/wiki
+    about: Display UI, MPC, UBL, and general Mriscoc usage
+  - name: Duender mechanical project
+    url: https://github.com/Irbis3D/Duender
+    about: Frame, belts, rails — not firmware
+  - name: Duender Discord
+    url: https://discord.gg/ae44FHv786
+    about: Community help for Duender builds

@@ -1,0 +1,27 @@
+# PlatformIO / Marlin build trees (clone upstream separately)
+.pio/
+.pioenvs/
+.piolibdeps/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Firmware binaries (publish via Releases, not committed)
+*.bin
+
+# Local EEPROM / mesh exports
+config/saved-settings/*.gcode
+config/saved-settings/*.txt
+
+# Python
+__pycache__/
+*.pyc
+.venv/

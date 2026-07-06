@@ -1,0 +1,62 @@
+{
+  "Configuration.h": [
+    {
+      "op": "Enable",
+      "searchfor": "COREXY",
+      "comment": "Duender MGN9H CoreXY kinematics"
+    },
+    {
+      "op": "Custom",
+      "mask": "{.*}",
+      "searchfor": "DEFAULT_AXIS_STEPS_PER_UNIT",
+      "value": "{ 80, 80, 400, 424.9 }",
+      "comment": "Sprite extruder E-steps — calibrate after install"
+    },
+    {
+      "op": "Custom",
+      "mask": "{.*}",
+      "searchfor": "DEFAULT_MAX_ACCELERATION",
+      "value": "{ 3000, 3000, 100, 1000 }",
+      "comment": "Conservative CoreXY start; raise after Input Shaping"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "X_BED_SIZE",
+      "value": "___MEASURE___",
+      "comment": "Duender usable bed width (mm)"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "Y_BED_SIZE",
+      "value": "___MEASURE___",
+      "comment": "Duender usable bed depth (mm)"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "X_MAX_POS",
+      "value": "___MEASURE___",
+      "comment": "Travel limit after X homing"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "Y_MAX_POS",
+      "value": "___MEASURE___",
+      "comment": "Travel limit after Y homing"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "Z_MAX_POS",
+      "value": "___MEASURE___",
+      "comment": "Mechanical Z travel — often ~270-280 on Duender"
+    },
+    {
+      "op": "Custom",
+      "mask": "{.*}",
+      "searchfor": "NOZZLE_TO_PROBE_OFFSET",
+      "value": "{ ___X___, ___Y___, 0 }",
+      "comment": "Measure CR Touch mount on Duender toolhead"
+    }
+  ],
+  "Configuration_adv.h": [],
+  "Version.h": []
+}

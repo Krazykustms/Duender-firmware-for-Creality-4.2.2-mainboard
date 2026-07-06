@@ -1,0 +1,62 @@
+{
+  "Configuration.h": [
+    {
+      "op": "Enable",
+      "searchfor": "COREXY",
+      "comment": "Duender MGN9H CoreXY kinematics"
+    },
+    {
+      "op": "Custom",
+      "mask": "{.*}",
+      "searchfor": "DEFAULT_AXIS_STEPS_PER_UNIT",
+      "value": "{ 80, 80, 400, 424.9 }",
+      "comment": "Sprite extruder E-steps — calibrate after install"
+    },
+    {
+      "op": "Custom",
+      "mask": "{.*}",
+      "searchfor": "DEFAULT_MAX_ACCELERATION",
+      "value": "{ 3000, 3000, 100, 1000 }",
+      "comment": "Conservative CoreXY start; raise after Input Shaping"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "X_BED_SIZE",
+      "value": "230",
+      "comment": "CI placeholder — replace after measuring your bed"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "Y_BED_SIZE",
+      "value": "230",
+      "comment": "CI placeholder — replace after measuring your bed"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "X_MAX_POS",
+      "value": "248",
+      "comment": "CI placeholder — replace after measuring travel"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "Y_MAX_POS",
+      "value": "231",
+      "comment": "CI placeholder — replace after measuring travel"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "Z_MAX_POS",
+      "value": "280",
+      "comment": "CI placeholder — typical Duender range; measure yours"
+    },
+    {
+      "op": "Custom",
+      "mask": "{.*}",
+      "searchfor": "NOZZLE_TO_PROBE_OFFSET",
+      "value": "{ -41.5, -7, 0 }",
+      "comment": "CI placeholder Ender mount — measure your CR Touch mount"
+    }
+  ],
+  "Configuration_adv.h": [],
+  "Version.h": []
+}

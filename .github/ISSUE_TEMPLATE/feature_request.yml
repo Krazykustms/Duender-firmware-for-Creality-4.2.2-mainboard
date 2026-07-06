@@ -1,0 +1,41 @@
+name: Feature request
+description: Suggest a config option, doc improvement, or CI enhancement
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or gap
+      description: What is hard to do today with this repo?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: New CreateConfigs overlay, doc section, workflow step, etc.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Configuration / CreateConfigs
+        - Documentation
+        - CI / build tooling
+        - GitHub templates / releases
+        - Other
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: willing
+    attributes:
+      label: Contribution
+      options:
+        - label: I can open a PR for this
+          required: false

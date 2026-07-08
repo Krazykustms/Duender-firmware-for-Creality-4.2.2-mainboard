@@ -33,12 +33,6 @@
     },
     {
       "op": "CustomVal",
-      "searchfor": "Z_MIN_PROBE_ENDSTOP_HIT_STATE",
-      "value": "HIGH",
-      "comment": "BLTouch / CR Touch on 4.2.2 requires HIGH hit state"
-    },
-    {
-      "op": "CustomVal",
       "searchfor": "X_BED_SIZE",
       "value": "___MEASURE___",
       "comment": "Duender usable bed width (mm)"
@@ -73,21 +67,6 @@
       "searchfor": "NOZZLE_TO_PROBE_OFFSET",
       "value": "{ ___X___, ___Y___, 0 }",
       "comment": "Measure CR Touch mount on Duender toolhead"
-    },
-    {
-      "op": "Replace",
-      "searchfor": "DEFAULT_BED_KP",
-      "value": "DEFAULT_bedKp"
-    },
-    {
-      "op": "Replace",
-      "searchfor": "DEFAULT_BED_KI",
-      "value": "DEFAULT_bedKi"
-    },
-    {
-      "op": "Replace",
-      "searchfor": "DEFAULT_BED_KD",
-      "value": "DEFAULT_bedKd"
     }
   ],
   "Configuration_adv.h": [
@@ -96,30 +75,6 @@
       "searchfor": "CONFIGURATION_ADV_H_VERSION",
       "value": "02010300",
       "comment": "Match New-Year-2025 Marlin"
-    },
-    {
-      "op": "Disable",
-      "searchfor": "AUTOTEMP",
-      "comment": "Legacy Special_Configurations output enables AUTOTEMP without current required bounds"
-    },
-    {
-      "op": "Replace",
-      "searchfor": "LCD_SET_PROGRESS_MANUALLY",
-      "value": "SET_PROGRESS_MANUALLY"
-    }
-  ],
-  "Version.h": [
-    {
-      "op": "Custom",
-      "mask": "{.*}",
-      "searchfor": "MACHINE_NAME",
-      "value": "\"Duender MGN9H beta\"",
-      "comment": "LCD boot name — beta channel"
-    },
-    {
-      "op": "Replace",
-      "searchfor": "Duender-422-BLTUBL-MPC-T13, based on bugfix-2.1.x",
-      "value": "Duender-422-BLTUBL-MPC-T13-beta.1 CoreXY, New-Year-2025"
     }
   ],
   "platformio.ini": [

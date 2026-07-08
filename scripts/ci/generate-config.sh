@@ -29,19 +29,63 @@ cp "$FEATURE_FILE" "$CONFIGS_DIR/_features/Duender-CoreXY.json"
 
 (
   cd "$CONFIGS_DIR"
-  python3 -c "import CreateConfigs; CreateConfigs.Generate('$CONFIG_NAME', ['Ender3V2','422','BLT','UBL','MPC','T13','Duender-CoreXY'])"
+  if ! python3 -c "import CreateConfigs; import sys; sys.exit(CreateConfigs.Generate('$CONFIG_NAME', ['Ender3V2','422','BLT','UBL','MPC','T13','Duender-CoreXY']))"; then
+    echo "CreateConfigs failed — see $CONFIGS_DIR/$CONFIG_NAME/log.txt" >&2
+    if [[ -f "$CONFIGS_DIR/$CONFIG_NAME/log.txt" ]]; then
+      cat "$CONFIGS_DIR/$CONFIG_NAME/log.txt" >&2
+    fi
+    exit 1
+  fi
 )
 
-if grep -q '___MEASURE___' "$CONFIGS_DIR/$CONFIG_NAME/Configuration.h"; then
+OUTPUT_DIR="$CONFIGS_DIR/$CONFIG_NAME"
+for f in Configuration.h Configuration_adv.h Version.h platformio.ini; do
+  if [[ ! -f "$OUTPUT_DIR/$f" ]]; then
+    echo "Missing generated file: $OUTPUT_DIR/$f" >&2
+    exit 1
+  fi
+done
+
+if grep -q '___MEASURE___' "$OUTPUT_DIR/Configuration.h"; then
   echo "Unresolved ___MEASURE___ placeholders in Configuration.h" >&2
   echo "Use Duender-CoreXY-CI.json or fill values in Duender-CoreXY.json" >&2
   exit 1
 fi
 
-cp "$CONFIGS_DIR/$CONFIG_NAME/Configuration.h" "$FIRMWARE_DIR/Marlin/"
-cp "$CONFIGS_DIR/$CONFIG_NAME/Configuration_adv.h" "$FIRMWARE_DIR/Marlin/"
-cp "$CONFIGS_DIR/$CONFIG_NAME/Version.h" "$FIRMWARE_DIR/Marlin/"
-cp "$CONFIGS_DIR/$CONFIG_NAME/platformio.ini" "$FIRMWARE_DIR/"
+cp "$OUTPUT_DIR/Configuration.h" "$FIRMWARE_DIR/Marlin/"
+cp "$OUTPUT_DIR/Configuration_adv.h" "$FIRMWARE_DIR/Marlin/"
+cp "$OUTPUT_DIR/Version.h" "$FIRMWARE_DIR/Marlin/"
+cp "$OUTPUT_DIR/platformio.ini" "$FIRMWARE_DIR/"
+
+# Version.h overlays must run after CreateConfigs injects DETAILED_BUILD_VERSION.
+if [[ -f "$FIRMWARE_DIR/Marlin/Version.h" ]]; then
+  python3 - "$FIRMWARE_DIR/Marlin/Version.h" "$CONFIG_NAME" <<'PY'
+from pathlib import Path
+import re
+import sys
+
+path = Path(sys.argv[1])
+config_name = sys.argv[2]
+text = path.read_text(encoding="utf-8")
+
+text = re.sub(
+    r'^(\s*#define MACHINE_NAME\s+).*$',
+    r'\1"Duender MGN9H beta"  // LCD boot name — beta channel',
+    text,
+    count=1,
+    flags=re.MULTILINE,
+)
+
+text = re.sub(
+    rf'(SHORT_BUILD_VERSION " ){re.escape(config_name)}, based on bugfix-2\.1\.x(")',
+    r'\1Duender-422-BLTUBL-MPC-T13-beta.1 CoreXY, New-Year-2025\2',
+    text,
+    count=1,
+)
+
+path.write_text(text, encoding="utf-8")
+PY
+fi
 
 # Marlin 2.1.3+ preflight expects ANY/ALL instead of EITHER/BOTH in config headers.
 for f in Configuration.h Configuration_adv.h; do

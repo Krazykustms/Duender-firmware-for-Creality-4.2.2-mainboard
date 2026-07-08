@@ -3,7 +3,11 @@
   "version": "0.1.0-beta.1",
   "profile": "Duender-422-BLTUBL-MPC-T13",
   "machine_name": "Duender MGN9H beta",
+  "mainboard": "Creality 4.2.2 (BOARD_CREALITY_V4)",
+  "mcu": "GD32F303RET6",
+  "mcu_flash_kb": 512,
   "build_env": "STM32F103RE_creality",
+  "build_env_note": "Mriscoc/PlatformIO environment name only — not the physical chip. Required 512K profile for GD32F303RET6 Neo boards. Do not use STM32F103RC_creality (256K).",
   "upstream": {
     "Ender3V2S1": "New-Year-2025",
     "Special_Configurations": "main"
@@ -11,11 +15,12 @@
   "validated": {
     "date": "2026-07-06",
     "platform": "Windows 11, PlatformIO 6.x, short path (C:\\fw)",
-    "mcu_note": "Built for 512K Creality 4.2.2 (STM32F103RE_creality). Validated build target for GD32F303RET6 Neo boards."
+    "mcu_note": "Validated for GD32F303RET6 on Creality 4.2.2 Neo via Mriscoc STM32F103RE_creality (512K env name)."
   },
   "caveats": [
     "CI placeholder bed/travel/probe values — measure your Duender before trusting limits",
     "Motor invert flags not set — verify after first CoreXY homing",
-    "Not a tagged GitHub Release yet — beta smoke-test on hardware before daily use"
+    "Not a tagged GitHub Release yet — beta smoke-test on hardware before daily use",
+    "Wrong build env (256K RC) can brick GD32 Neo boards — see docs/board-mcu.md"
   ]
 }

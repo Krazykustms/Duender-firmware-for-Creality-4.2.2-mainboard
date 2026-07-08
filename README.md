@@ -2,7 +2,9 @@
 
 Custom [Mriscoc Professional](https://github.com/mriscoc/Ender3V2S1) firmware for a **Duender PIN v6 MGN9H** CoreXY conversion.
 
-**Goal:** Reuse the **Creality 4.2.2** mainboard from an **Ender-3 V2 Neo** (GD32F303RET6 or STM32F103RET6), keeping the **CR Touch**, **Sprite extruder**, and **DWIN display/UI** — while running CoreXY kinematics on the Duender frame. Dual Z steppers are wired in parallel on one driver.
+**Goal:** Reuse the **Creality 4.2.2** mainboard from an **Ender-3 V2 Neo** (**GD32F303RET6**, 512 KB), keeping the **CR Touch**, **Sprite extruder**, and **DWIN display/UI** — while running CoreXY kinematics on the Duender frame. Dual Z steppers are wired in parallel on one driver.
+
+**Board/MCU:** see [docs/board-mcu.md](docs/board-mcu.md) — this repo is board-specific; flashing the wrong size or profile can brick the mainboard.
 
 **Repo:** [github.com/Krazykustms/Duender-firmware-for-Creality-4.2.2-mainboard](https://github.com/Krazykustms/Duender-firmware-for-Creality-4.2.2-mainboard)
 
@@ -10,7 +12,7 @@ Custom [Mriscoc Professional](https://github.com/mriscoc/Ender3V2S1) firmware fo
 
 Builds on the Mriscoc `Ender3V2-422-BLTUBL-MPC` profile + `T13` (Sprite thermistor) + `Duender-CoreXY` overlay.
 
-**Firmware channel:** **beta** `0.1.0-beta.1` — see [docs/beta.md](docs/beta.md) and [config/firmware-version.json](config/firmware-version.json). First config-complete build validated locally (compile + 512K `STM32F103RE_creality` target for GD32F303 Neo boards). Placeholder bed/travel values — measure your Duender before trusting limits.
+**Firmware channel:** **beta** `0.1.0-beta.1` — see [docs/beta.md](docs/beta.md) and [config/firmware-version.json](config/firmware-version.json). First config-complete build validated locally for **GD32F303RET6 / Creality 4.2.2 Neo** (Mriscoc env `STM32F103RE_creality` = 512K profile name only). Placeholder bed/travel values — measure your Duender before trusting limits.
 
 **Contributing:** see [CONTRIBUTING.md](CONTRIBUTING.md). Download CI-built `.bin` files from the [Actions](https://github.com/Krazykustms/Duender-firmware-for-Creality-4.2.2-mainboard/actions) tab (artifacts use placeholder bed dimensions until you measure yours).
 
@@ -40,7 +42,7 @@ This is an intentional staging step: cartesian bring-up proves the board, displa
 | **Target machine** | Duender PIN v6 MGN9H CoreXY |
 | Kinematics | CoreXY |
 | Mainboard | Creality 4.2.2 (`BOARD_CREALITY_V4`) |
-| MCU | GD32F303RET6 (typical Neo) — build with **`STM32F103RE_creality`** (512K env name, not the chip vendor) |
+| MCU | **GD32F303RET6** (512 KB) — [board-mcu.md](docs/board-mcu.md); Mriscoc env `STM32F103RE_creality` (name only) |
 | Probe | CR Touch (BLTouch-compatible) |
 | Extruder | Creality Sprite (direct drive) → use **`T13`** thermistor profile |
 | Z axis | Dual leadscrew steppers, **parallel-wired** to Z driver |
@@ -71,6 +73,7 @@ Prebuilt binary you may already run: `Ender3V2-422-BLTUBL-MPC`. For Duender + Sp
 │   ├── wiring.md              # Harness, driver slots, probe, power
 │   ├── build.md               # Compile and flash workflow
 │   ├── beta.md                # Beta channel, version, flash caveats
+│   ├── board-mcu.md           # GD32F303RET6 Neo board vs Mriscoc build env names
 │   └── bringup-status.md      # Current hardware/firmware validation status
 ├── .github/
 │   ├── workflows/build-firmware.yml        # PlatformIO CI

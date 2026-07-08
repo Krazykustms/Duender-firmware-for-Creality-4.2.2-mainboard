@@ -71,7 +71,7 @@ CI pins by default (beta **`0.1.0-beta.1`**):
 | [Ender3V2S1](https://github.com/mriscoc/Ender3V2S1) | `New-Year-2025` | Current Mriscoc professional branch |
 | [Special_Configurations](https://github.com/mriscoc/Special_Configurations) | `main` | Matches New-Year-2025; legacy `T13` tag is too old |
 
-Build environment: **`STM32F103RE_creality`** (512K Creality 4.2.2 — correct for GD32F303RET6 Neo donors).
+Build environment: **`STM32F103RE_creality`** — Mriscoc 512K profile for **GD32F303RET6** Neo 4.2.2 ([board-mcu.md](docs/board-mcu.md)).
 
 Bump refs in `.github/workflows/build-firmware.yml` and [config/firmware-version.json](config/firmware-version.json) when you validate a newer Mriscoc release.
 

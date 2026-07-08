@@ -2,7 +2,7 @@
 
 Wiring map for this firmware repo. Pin names follow Marlin `pins_CREALITY_V4.h` (4.2.2 / 4.2.7 family).
 
-> **MCU note:** Many 4.2.2 boards ship with **GD32F303RET6** instead of STM32F103RET6. Pinout and Mriscoc `422` builds are the same; flash the standard 4.2.2 binary unless you have verified a different bootloader layout.
+> **MCU (read first):** This repo targets **GD32F303RET6** on Creality **4.2.2** (Ender-3 V2 Neo). Pin map follows `pins_CREALITY_V4.h`. Build with Mriscoc env **`STM32F103RE_creality`** (512K profile name only). See [board-mcu.md](board-mcu.md) — **do not** flash 256K (`RC`) firmware on Neo GD32 boards.
 
 ## Driver slot assignment (Duender CoreXY)
 

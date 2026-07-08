@@ -111,7 +111,7 @@
       "op": "Replace",
       "searchfor": "default_envs = STM32F103RC_creality",
       "value": "default_envs = STM32F103RE_creality",
-      "comment": "512K Creality 4.2.2 (GD32F303RET6 uses this target — not STM32F103RC 256K)"
+      "comment": "GD32F303RET6 Neo 4.2.2 (512K) — Mriscoc env STM32F103RE_creality; do not use RC (256K)"
     }
   ]
 }

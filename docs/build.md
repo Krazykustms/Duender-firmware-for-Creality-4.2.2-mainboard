@@ -49,7 +49,7 @@ export FEATURE_FILE="$PWD/config/features/Duender-CoreXY.json"
 bash scripts/ci/generate-config.sh
 ```
 
-The script also copies `Version.h`, applies Marlin 2.1.3 `ANY`/`ALL` macro updates, and sets **`STM32F103RE_creality`** (512K) in `platformio.ini`.
+The script also copies `Version.h`, applies Marlin 2.1.3 `ANY`/`ALL` macro updates, and sets the **512K GD32 Neo** profile in `platformio.ini` (Mriscoc env `STM32F103RE_creality` — see [board-mcu.md](board-mcu.md)).
 
 **Manual alternative:**
 
@@ -84,21 +84,24 @@ Work through [config/Configuration.h.diff-outline.md](../config/Configuration.h.
 
 ## 4. Compile
 
+**Board:** Creality 4.2.2 with **GD32F303RET6** (Ender-3 V2 Neo donor). Read [board-mcu.md](board-mcu.md) before choosing a build target — wrong flash size can brick the board.
+
 ```bash
-cd Ender3V2S1   # or $FIRMWARE_DIR
-pio run -e STM32F103RE_creality
+cd upstream/Ender3V2S1   # or $FIRMWARE_DIR
+pio run -e STM32F103RE_creality   # Mriscoc 512K env name — required for GD32F303RET6 Neo
 ```
 
-### GD32F303RET6 (Ender-3 V2 Neo) — read this
+### Build environment (GD32F303RET6 Neo)
 
-Your board likely has a **GigaDevice GD32F303**, not an ST STM32F103. Mriscoc still builds with:
+Your **physical MCU** is GigaDevice **GD32F303RET6** (512 KB). Mriscoc names the required profile `STM32F103RE_creality` — that is the **PlatformIO environment name**, not the chip on the PCB.
 
-| Environment | When |
-|-------------|------|
-| **`STM32F103RE_creality`** | **512K RET6 / GD32F303RET6** (typical Neo + this project) |
-| `STM32F103RC_creality` | 256K only — wrong for most Neo boards |
+| Physical MCU | PlatformIO env | Flash | Use for this project? |
+|--------------|----------------|-------|------------------------|
+| **GD32F303RET6** (Neo 4.2.2) | `STM32F103RE_creality` | 512 KB | **Yes — required** |
+| STM32F103RCT6 | `STM32F103RC_creality` | 256 KB | **No — wrong size** |
+| GD32F303 (maple env) | `GD32F303RE_creality_maple` | — | **No — ProUI build fails** |
 
-Do **not** use `GD32F303RE_creality_maple` — ProUI library selection fails in current Mriscoc builds.
+Do **not** flash RC (256K) firmware on a GD32F303RET6 Neo board.
 
 ## 5. Flash
 
@@ -140,4 +143,5 @@ Export working EEPROM values to a text snippet in `config/saved-settings/` for r
 | Temps max out at 275 | Confirm `T13` profile; `HEATER_0_MAXTEMP 300` |
 | Build fails config version | Use `Special_Configurations` **`main`**, not legacy `T13` tag |
 | `DEFAULT_bedKp` compile error | Regenerate with current `Duender-CoreXY*.json` overlays |
+| Wrong MCU profile / blank screen after flash | Confirm **GD32F303RET6** Neo board; use `STM32F103RE_creality` only — see [board-mcu.md](board-mcu.md) |
 | Windows path / pins errors | Clone to `C:\fw` or `subst W:` short path |

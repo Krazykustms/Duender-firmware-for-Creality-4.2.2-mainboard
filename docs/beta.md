@@ -13,16 +13,18 @@ This is the first **config-complete, locally validated** build for Duender PIN v
 - Bed/travel/probe numbers are **placeholders** from `Duender-CoreXY-CI.json` until you measure your frame.
 - Treat as **experimental** until you homing-test, set motor directions, and run MPC/UBL calibration on your machine.
 
-## Build target (GD32 Neo boards)
+## Build target — GD32F303RET6 Neo (Creality 4.2.2)
 
-Most Ender-3 V2 Neo 4.2.2 boards use **GD32F303RET6** (512 KB), not STM32F103.
+This project targets **GigaDevice GD32F303RET6** on the Ender-3 V2 Neo **4.2.2** board (512 KB flash). Full reference: [board-mcu.md](board-mcu.md).
 
-| You have | PlatformIO environment | Notes |
-|----------|------------------------|-------|
-| GD32F303RET6 or STM32F103RET6 (512K) | `STM32F103RE_creality` | **Use this** — Mriscoc name, not the literal chip vendor |
-| STM32F103RCT6 (256K) only | `STM32F103RC_creality` | Wrong for typical Neo / Duender donor boards |
+Mriscoc requires the **`STM32F103RE_creality`** PlatformIO environment for this hardware. That name is **not** the physical chip — it is the 512K Creality 4.2.2 profile.
 
-Do **not** use `GD32F303RE_creality_maple` — Mriscoc ProUI prebuild scripts do not support it.
+| Physical MCU on your board | PlatformIO env | OK for this repo? |
+|----------------------------|------------------|-------------------|
+| **GD32F303RET6** (Neo 4.2.2) | `STM32F103RE_creality` | **Yes** |
+| STM32F103RCT6 (256K 4.2.2 only) | `STM32F103RC_creality` | **No — wrong flash size** |
+
+Do **not** use `GD32F303RE_creality_maple` — ProUI prebuild scripts do not support it on current Mriscoc builds.
 
 ## Get a beta binary
 

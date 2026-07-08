@@ -9,6 +9,7 @@ CONFIGS_DIR="${CONFIGS_DIR:-$ROOT/upstream/Special_Configurations}"
 CONFIG_NAME="${CONFIG_NAME:-Duender-422-BLTUBL-MPC-T13}"
 FEATURE_FILE="${FEATURE_FILE:-$ROOT/config/features/Duender-CoreXY-CI.json}"
 PATCH_SCRIPT="$ROOT/scripts/ci/patch_marlin_outputs.py"
+CREATE_SCRIPT="$ROOT/scripts/ci/run_create_configs.py"
 
 if [[ ! -d "$FIRMWARE_DIR" ]]; then
   echo "Missing firmware tree: $FIRMWARE_DIR" >&2
@@ -31,18 +32,16 @@ if [[ ! -f "$PATCH_SCRIPT" ]]; then
   exit 1
 fi
 
+if [[ ! -f "$CREATE_SCRIPT" ]]; then
+  echo "Missing CreateConfigs runner: $CREATE_SCRIPT" >&2
+  exit 1
+fi
+
 cp "$FEATURE_FILE" "$CONFIGS_DIR/_features/Duender-CoreXY.json"
 
-(
-  cd "$CONFIGS_DIR"
-  if ! python3 -c "import CreateConfigs; import sys; sys.exit(CreateConfigs.Generate('$CONFIG_NAME', ['Ender3V2','422','BLT','UBL','MPC','T13','Duender-CoreXY']))"; then
-    echo "CreateConfigs failed — see $CONFIGS_DIR/$CONFIG_NAME/log.txt" >&2
-    if [[ -f "$CONFIGS_DIR/$CONFIG_NAME/log.txt" ]]; then
-      cat "$CONFIGS_DIR/$CONFIG_NAME/log.txt" >&2
-    fi
-    exit 1
-  fi
-)
+if ! python3 "$CREATE_SCRIPT" "$CONFIGS_DIR" "$CONFIG_NAME"; then
+  exit 1
+fi
 
 OUTPUT_DIR="$CONFIGS_DIR/$CONFIG_NAME"
 for f in Configuration.h Configuration_adv.h Version.h platformio.ini; do

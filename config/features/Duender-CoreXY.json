@@ -76,13 +76,5 @@
       "value": "02010300",
       "comment": "Match New-Year-2025 Marlin"
     }
-  ],
-  "platformio.ini": [
-    {
-      "op": "Replace",
-      "searchfor": "default_envs = STM32F103RC_creality",
-      "value": "default_envs = STM32F103RE_creality",
-      "comment": "GD32F303RET6 Neo 4.2.2 (512K) — Mriscoc env STM32F103RE_creality; do not use RC (256K)"
-    }
   ]
 }

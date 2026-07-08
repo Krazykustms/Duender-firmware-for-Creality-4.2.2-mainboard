@@ -219,6 +219,16 @@ def patch_ui_api(path: Path) -> None:
     path.write_text(text, encoding="utf-8")
 
 
+def patch_platformio_ini(path: Path) -> None:
+    text = path.read_text(encoding="utf-8")
+    if "default_envs = STM32F103RE_creality" not in text:
+        text = text.replace(
+            "default_envs = STM32F103RC_creality",
+            "default_envs = STM32F103RE_creality",
+        )
+    path.write_text(text, encoding="utf-8")
+
+
 def patch_stm32f1_ini(path: Path) -> None:
     lines = path.read_text(encoding="utf-8").splitlines()
     env_header = "[env:STM32F103RE_creality]"
@@ -253,6 +263,7 @@ def main() -> int:
         ("Version.h", firmware_dir / "Marlin/Version.h", lambda p: patch_version_h(p, config_name)),
         ("Configuration.h", firmware_dir / "Marlin/Configuration.h", patch_configuration_h),
         ("Configuration_adv.h", firmware_dir / "Marlin/Configuration_adv.h", patch_configuration_adv_h),
+        ("platformio.ini", firmware_dir / "platformio.ini", patch_platformio_ini),
         ("ui_api.cpp", firmware_dir / "Marlin/src/lcd/extui/ui_api.cpp", patch_ui_api),
         ("stm32f1.ini", firmware_dir / "ini/stm32f1.ini", patch_stm32f1_ini),
     ]

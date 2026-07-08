@@ -39,22 +39,22 @@ jobs:
 
     steps:
       - name: Checkout Duender config repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
       - name: Checkout mriscoc/Ender3V2S1
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: mriscoc/Ender3V2S1
           ref: ${{ env.MRISCOC_FIRMWARE_REF }}
           path: upstream/Ender3V2S1
 
       - name: Checkout mriscoc/Special_Configurations
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: mriscoc/Special_Configurations
           ref: ${{ env.MRISCOC_CONFIG_REF }}
@@ -74,7 +74,7 @@ jobs:
         run: bash scripts/ci/generate-config.sh
 
       - name: Cache PlatformIO
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.platformio
@@ -96,7 +96,7 @@ jobs:
           ls -la dist/
 
       - name: Upload firmware artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: duender-firmware-${{ env.FIRMWARE_VERSION }}-${{ github.run_number }}
           path: dist/*.bin

@@ -136,12 +136,18 @@ def patch_configuration_adv_h(path: Path) -> None:
 
     text = re.sub(r"^\s*#define\s+AUTOTEMP\b.*$", "//#define AUTOTEMP", text, flags=re.MULTILINE)
     text = re.sub(r"LCD_SET_PROGRESS_MANUALLY", "SET_PROGRESS_MANUALLY", text)
-    text = re.sub(
-        r"^\s*#define\s+SET_PROGRESS_MANUALLY\b.*$",
-        "//#define SET_PROGRESS_MANUALLY",
-        text,
-        flags=re.MULTILINE,
-    )
+    if "SET_PROGRESS_PERCENT" not in text:
+        text = re.sub(
+            r"^( *\#define\s+SET_PROGRESS_MANUALLY\b[^\n]*)$",
+            r"\1\n"
+            r"#if ENABLED(SET_PROGRESS_MANUALLY)\n"
+            r"  #define SET_PROGRESS_PERCENT  // MRiscoC Allows display feedback of host printing through GCode M73\n"
+            r"  #define SET_REMAINING_TIME    // MRiscoC Allows display feedback of host printing through GCode M73\n"
+            r"#endif",
+            text,
+            count=1,
+            flags=re.MULTILINE,
+        )
     text = re.sub(
         r"^\s*#define\s+INVERT_[A-Z0-9]+_STEP_PIN\b.*$",
         lambda m: "//" + m.group(0).lstrip(),

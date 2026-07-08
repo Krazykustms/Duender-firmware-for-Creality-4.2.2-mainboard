@@ -71,7 +71,7 @@ Connect to the dedicated **BLTouch** header on 4.2.2:
 
 Firmware: `#define BLTOUCH` (already in BLTUBL base). Z homing uses probe via `Z_SAFE_HOMING` at bed center — same as stock Mriscoc CRTouch builds.
 
-**Mounting:** Measure and set `NOZZLE_TO_PROBE_OFFSET { x, y, z }` after installing the probe on your Duender toolhead. Stock Ender mount offsets do **not** apply.
+**Mounting:** Measure and set `NOZZLE_TO_PROBE_OFFSET { x, y, z }` after installing the probe on your Duender toolhead. If you are still using the stock Ender carriage / Sprite / CR Touch layout, stock Ender offsets are a reasonable **starting point** only; confirm final values on your assembled Duender.
 
 ## Sprite extruder
 

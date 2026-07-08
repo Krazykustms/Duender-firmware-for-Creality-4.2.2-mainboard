@@ -11,7 +11,7 @@
   "validated": {
     "date": "2026-07-06",
     "platform": "Windows 11, PlatformIO 6.x, short path (C:\\fw)",
-    "mcu_note": "Built for 512K Creality 4.2.2 (STM32F103RE_creality). Flash-tested target for GD32F303RET6 Neo boards."
+    "mcu_note": "Built for 512K Creality 4.2.2 (STM32F103RE_creality). Validated build target for GD32F303RET6 Neo boards."
   },
   "caveats": [
     "CI placeholder bed/travel/probe values — measure your Duender before trusting limits",

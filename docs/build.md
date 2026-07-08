@@ -10,21 +10,27 @@
 
 Keep clone paths **short** on Windows (e.g. `C:\fw\...`). PlatformIO fails on deep paths and long-path git checkouts.
 
-## 1. Clone upstream firmware
+## 1. Clone repo and upstream inputs
 
 ```bash
 mkdir -p ~/duender-fw && cd ~/duender-fw   # or C:\fw on Windows
 
-git clone -b New-Year-2025 https://github.com/mriscoc/Ender3V2S1.git
-git clone -b main https://github.com/mriscoc/Special_Configurations.git
-git clone https://github.com/Krazykustms/Duender-firmware-for-Creality-4.2.2-mainboard.git duender-config
+git clone --recurse-submodules https://github.com/Krazykustms/Duender-firmware-for-Creality-4.2.2-mainboard.git duender-config
+git clone -b main https://github.com/mriscoc/Special_Configurations.git duender-config/upstream/Special_Configurations
+```
+
+If you already cloned this repo without submodules:
+
+```bash
+cd duender-config
+git submodule update --init --recursive
 ```
 
 Set paths if not using `upstream/` under the config repo:
 
 ```bash
-export FIRMWARE_DIR="$PWD/Ender3V2S1"
-export CONFIGS_DIR="$PWD/Special_Configurations"
+export FIRMWARE_DIR="$PWD/duender-config/upstream/Ender3V2S1"
+export CONFIGS_DIR="$PWD/duender-config/upstream/Special_Configurations"
 ```
 
 ## 2. Generate configuration
@@ -47,10 +53,10 @@ The script also copies `Version.h`, applies Marlin 2.1.3 `ANY`/`ALL` macro updat
 
 **Manual alternative:**
 
-Copy `config/features/Duender-CoreXY.json` into `Special_Configurations/_features/`, then:
+Copy `config/features/Duender-CoreXY.json` into `upstream/Special_Configurations/_features/`, then:
 
 ```bash
-cd Special_Configurations
+cd upstream/Special_Configurations
 python3 -c "import CreateConfigs; CreateConfigs.Generate('Duender-422-BLTUBL-MPC-T13', ['Ender3V2','422','BLT','UBL','MPC','T13','Duender-CoreXY'])"
 ```
 

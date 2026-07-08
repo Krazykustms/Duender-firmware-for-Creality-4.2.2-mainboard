@@ -2,7 +2,7 @@
 
 Thanks for helping improve Duender firmware configs for the Creality 4.2.2 board.
 
-This repo holds **configuration overlays and docs** — not a fork of Marlin. Upstream firmware lives at [mriscoc/Ender3V2S1](https://github.com/mriscoc/Ender3V2S1).
+This repo holds **configuration overlays and docs** plus a pinned Mriscoc firmware submodule at `upstream/Ender3V2S1`.
 
 ## Ways to contribute
 
@@ -25,13 +25,13 @@ This repo holds **configuration overlays and docs** — not a fork of Marlin. Up
 # Short paths help on Windows
 mkdir -p ~/duender-fw && cd ~/duender-fw
 
-git clone https://github.com/mriscoc/Ender3V2S1.git upstream/Ender3V2S1
-git -C upstream/Ender3V2S1 checkout New-Year-2025
+git clone --recurse-submodules https://github.com/Krazykustms/Duender-firmware-for-Creality-4.2.2-mainboard.git duender-config
 
+cd duender-config
 git clone -b main https://github.com/mriscoc/Special_Configurations.git upstream/Special_Configurations
 
-git clone https://github.com/Krazykustms/Duender-firmware-for-Creality-4.2.2-mainboard.git duender-config
-cd duender-config
+# If you cloned without submodules:
+git submodule update --init --recursive
 
 # CI-safe defaults (compiles without measured bed size)
 bash scripts/ci/generate-config.sh

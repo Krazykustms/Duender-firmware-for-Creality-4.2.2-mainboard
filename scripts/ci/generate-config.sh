@@ -11,7 +11,7 @@ FEATURE_FILE="${FEATURE_FILE:-$ROOT/config/features/Duender-CoreXY-CI.json}"
 
 if [[ ! -d "$FIRMWARE_DIR" ]]; then
   echo "Missing firmware tree: $FIRMWARE_DIR" >&2
-  echo "Clone https://github.com/mriscoc/Ender3V2S1 into upstream/Ender3V2S1" >&2
+  echo "Run: git submodule update --init --recursive" >&2
   exit 1
 fi
 

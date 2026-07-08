@@ -36,9 +36,9 @@ See [build.md](build.md). Summary:
 
 ```bash
 # Short paths on Windows (e.g. C:\fw\...)
-git clone -b New-Year-2025 https://github.com/mriscoc/Ender3V2S1.git
-git clone -b main https://github.com/mriscoc/Special_Configurations.git
-# clone this repo, then:
+git clone --recurse-submodules https://github.com/Krazykustms/Duender-firmware-for-Creality-4.2.2-mainboard.git
+cd Duender-firmware-for-Creality-4.2.2-mainboard
+git clone -b main https://github.com/mriscoc/Special_Configurations.git upstream/Special_Configurations
 bash scripts/ci/generate-config.sh
 cd upstream/Ender3V2S1   # or your FIRMWARE_DIR
 pio run -e STM32F103RE_creality

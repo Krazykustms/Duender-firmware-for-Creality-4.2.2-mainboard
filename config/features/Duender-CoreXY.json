@@ -27,6 +27,12 @@
     },
     {
       "op": "CustomVal",
+      "searchfor": "INVERT_Z_DIR",
+      "value": "false",
+      "comment": "Firmware-only fix for Duender conversion: Z+ must move bed down"
+    },
+    {
+      "op": "CustomVal",
       "searchfor": "X_BED_SIZE",
       "value": "___MEASURE___",
       "comment": "Duender usable bed width (mm)"

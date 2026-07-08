@@ -83,19 +83,29 @@ Prebuilt binary you may already run: `Ender3V2-422-BLTUBL-MPC`. For Duender + Sp
 │       ├── Duender-CoreXY.json             # Your measured values (___MEASURE___)
 │       └── Duender-CoreXY-CI.json          # CI-safe placeholder dimensions
 ├── dist/README.md             # Where local .bin builds go (gitignored)
+├── upstream/
+│   └── Ender3V2S1/            # Mriscoc firmware git submodule
 ├── scripts/ci/generate-config.sh           # Local + CI config generator
 ├── CONTRIBUTING.md
 └── .gitignore
 ```
 
-Firmware sources are **not vendored** here. Clone [mriscoc/Ender3V2S1](https://github.com/mriscoc/Ender3V2S1) and apply configs from this repo.
+The Mriscoc firmware source is kept here as a git submodule at `upstream/Ender3V2S1`. Clone this repo with `--recurse-submodules`, or run `git submodule update --init --recursive` after cloning.
 
 ## Quick start
 
-1. Read [docs/wiring.md](docs/wiring.md) and verify harness against your build.
-2. Generate a base config from [mriscoc/Special_Configurations](https://github.com/mriscoc/Special_Configurations) (`main` branch):
+1. Clone this repo with submodules:
 
    ```bash
+   git clone --recurse-submodules https://github.com/Krazykustms/Duender-firmware-for-Creality-4.2.2-mainboard.git
+   cd Duender-firmware-for-Creality-4.2.2-mainboard
+   ```
+
+2. Read [docs/wiring.md](docs/wiring.md) and verify harness against your build.
+3. Clone [mriscoc/Special_Configurations](https://github.com/mriscoc/Special_Configurations) (`main` branch) into `upstream/Special_Configurations`, then generate a base config:
+
+   ```bash
+   git clone -b main https://github.com/mriscoc/Special_Configurations.git upstream/Special_Configurations
    bash scripts/ci/generate-config.sh
    ```
 
@@ -111,8 +121,8 @@ Firmware sources are **not vendored** here. Clone [mriscoc/Ender3V2S1](https://g
 
    Place `Duender-CoreXY.json` in `_features/` before running (see [config/features/](config/features/)).
 
-3. Apply remaining edits from [config/Configuration.h.diff-outline.md](config/Configuration.h.diff-outline.md) — especially bed size, probe offset, and motor directions after first homing tests.
-4. Build and flash per [docs/build.md](docs/build.md) (beta: [docs/beta.md](docs/beta.md)).
+4. Apply remaining edits from [config/Configuration.h.diff-outline.md](config/Configuration.h.diff-outline.md) — especially bed size, probe offset, and motor directions after first homing tests.
+5. Build and flash per [docs/build.md](docs/build.md) (beta: [docs/beta.md](docs/beta.md)).
 
 ## Base configuration
 

@@ -1,0 +1,4 @@
+[submodule "upstream/Ender3V2S1"]
+	path = upstream/Ender3V2S1
+	url = https://github.com/mriscoc/Ender3V2S1.git
+	branch = New-Year-2025

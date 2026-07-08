@@ -14,6 +14,24 @@ Builds on the Mriscoc `Ender3V2-422-BLTUBL-MPC` profile + `T13` (Sprite thermist
 
 **Contributing:** see [CONTRIBUTING.md](CONTRIBUTING.md). Download CI-built `.bin` files from the [Actions](https://github.com/Krazykustms/Duender-firmware-for-Creality-4.2.2-mainboard/actions) tab (artifacts use placeholder bed dimensions until you measure yours).
 
+## Current bring-up status
+
+Current state is tracked in [docs/bringup-status.md](docs/bringup-status.md).
+
+The printer is not mechanically complete for CoreXY yet because X/Y pulleys and belts are still pending, but the reused Ender-3 V2 Neo electronics have already been validated with stock cartesian Mriscoc firmware:
+
+- [x] X and Y endstops installed and tested
+- [x] Bed can be raised/lowered from the screen controls
+- [x] Extruder motor tested
+- [x] Bed heater tested
+- [x] Manual electronic control confirmed working
+- [x] Printer boots and operates on Mriscoc `Ender3V2-422-BLTUBL-MPC` in cartesian mode
+- [ ] X/Y pulleys and belts installed
+- [ ] CoreXY motion validated with `COREXY` firmware
+- [ ] Final travel limits and probe offsets measured
+
+This is an intentional staging step: cartesian bring-up proves the board, display, heaters, motors, and endstops before switching the machine to CoreXY kinematics.
+
 ## Hardware summary
 
 | Item | Detail |
@@ -52,7 +70,8 @@ Prebuilt binary you may already run: `Ender3V2-422-BLTUBL-MPC`. For Duender + Sp
 ├── docs/
 │   ├── wiring.md              # Harness, driver slots, probe, power
 │   ├── build.md               # Compile and flash workflow
-│   └── beta.md                # Beta channel, version, flash caveats
+│   ├── beta.md                # Beta channel, version, flash caveats
+│   └── bringup-status.md      # Current hardware/firmware validation status
 ├── .github/
 │   ├── workflows/build-firmware.yml        # PlatformIO CI
 │   ├── ISSUE_TEMPLATE/                     # Bug, build, config help

@@ -42,7 +42,9 @@ Z driver (4.2.2)          Motor L          Motor R
 | Z | PB6 | PB5 | PC3 |
 | E0 | PB4 | PB3 | PC3 |
 
-If an axis moves the wrong way, fix in firmware (`INVERT_*_DIR`) or swap **one** motor coil pair — not both.
+If an axis moves the wrong way, fix it in firmware first with `INVERT_*_DIR`.
+
+For this specific Duender conversion, Z direction is already a known **firmware-only** item: keep the current Z wiring as-is. With the current cartesian-baseline Mriscoc setup, positive Z drives the bed **up** when final Duender behavior should drive the bed **down**. Correct this by flipping `INVERT_Z_DIR` in the final CoreXY build, then verify with a small safe `Z+` jog before trusting homing or probing.
 
 ## Endstops
 
@@ -129,4 +131,5 @@ Leave the **stock Ender-3 V2 DWIN** ribbon on **EXP1 / EXP3** as on the original
 5. Home **Y only**; verify direction toward Y switch.
 6. Fix `INVERT_X_DIR` / `INVERT_Y_DIR` if either axis runs away.
 7. Deploy CR Touch (`M280 P0 S10` / LCD) before first **Z** home.
-8. Run `G28` full home; set probe Z-offset (`M851 Z`) and `M500`.
+8. Before trusting probe motion, jog `Z+` a few millimeters and confirm the bed moves **down**.
+9. Run `G28` full home; set probe Z-offset (`M851 Z`) and `M500`.

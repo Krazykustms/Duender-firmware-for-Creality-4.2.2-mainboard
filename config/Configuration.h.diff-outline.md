@@ -98,11 +98,22 @@ With `COREXY` enabled, Marlin maps:
 // INVERT_*_DIR — MUST verify on hardware; starting guess from Ender cartesian often wrong
 #define INVERT_X_DIR false   // → toggle if X homes away from switch
 #define INVERT_Y_DIR false   // → toggle if Y homes away from switch
-#define INVERT_Z_DIR true    // usually keep Ender Z screw direction
+#define INVERT_Z_DIR true
+→ #define INVERT_Z_DIR false // known issue on this conversion: stock cartesian direction makes Z+ move bed up
 #define INVERT_E0_DIR false  // → toggle if Sprite extrudes backward
 ```
 
 **CoreXY direction test:** After `G28 X` / `G28 Y`, `G0 X10` should move nozzle +X; `G0 Y10` should move +Y. If you get mirroring, swap invert flags (only one axis may need flipping).
+
+**Known Z-direction result:** On this Duender conversion, cartesian-baseline Mriscoc drives Z in the wrong sign for final use: positive Z makes the bed rise when it should drop. Treat `INVERT_Z_DIR` as already known and fix this in firmware only; keep the current Z wiring unchanged. Then verify with a safe jog:
+
+```gcode
+G91
+G0 Z10
+G90
+```
+
+Correct result: `Z+` should move the bed **down**, away from the nozzle.
 
 ---
 

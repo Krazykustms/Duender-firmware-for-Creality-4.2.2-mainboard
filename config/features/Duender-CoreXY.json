@@ -33,6 +33,12 @@
     },
     {
       "op": "CustomVal",
+      "searchfor": "Z_MIN_PROBE_ENDSTOP_HIT_STATE",
+      "value": "HIGH",
+      "comment": "BLTouch / CR Touch on 4.2.2 requires HIGH hit state"
+    },
+    {
+      "op": "CustomVal",
       "searchfor": "X_BED_SIZE",
       "value": "___MEASURE___",
       "comment": "Duender usable bed width (mm)"
@@ -90,6 +96,16 @@
       "searchfor": "CONFIGURATION_ADV_H_VERSION",
       "value": "02010300",
       "comment": "Match New-Year-2025 Marlin"
+    },
+    {
+      "op": "Disable",
+      "searchfor": "AUTOTEMP",
+      "comment": "Legacy Special_Configurations output enables AUTOTEMP without current required bounds"
+    },
+    {
+      "op": "Replace",
+      "searchfor": "LCD_SET_PROGRESS_MANUALLY",
+      "value": "SET_PROGRESS_MANUALLY"
     }
   ],
   "Version.h": [

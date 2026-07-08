@@ -7,6 +7,28 @@ import re
 import sys
 from pathlib import Path
 
+# Special_Configurations main still emits legacy DEFAULT_BED_KP names; New-Year-2025
+# Marlin settings.cpp expects DEFAULT_bedKp / DEFAULT_Kp style symbols.
+LEGACY_PID_RENAMES = (
+    ("DEFAULT_BED_KP", "DEFAULT_bedKp"),
+    ("DEFAULT_BED_KI", "DEFAULT_bedKi"),
+    ("DEFAULT_BED_KD", "DEFAULT_bedKd"),
+    ("DEFAULT_KP", "DEFAULT_Kp"),
+    ("DEFAULT_KI", "DEFAULT_Ki"),
+    ("DEFAULT_KD", "DEFAULT_Kd"),
+)
+
+
+def rename_legacy_pid_defines(text: str) -> str:
+    for old, new in LEGACY_PID_RENAMES:
+        text = re.sub(
+            rf"(^\s*#define\s+){re.escape(old)}(\b.*)$",
+            rf"\1{new}\2",
+            text,
+            flags=re.MULTILINE,
+        )
+    return text
+
 
 def patch_version_h(path: Path, config_name: str) -> None:
     text = path.read_text(encoding="utf-8")
@@ -31,6 +53,7 @@ def patch_version_h(path: Path, config_name: str) -> None:
 
 def patch_configuration_h(path: Path) -> None:
     text = path.read_text(encoding="utf-8")
+    text = rename_legacy_pid_defines(text)
 
     text = re.sub(
         r"^\s*#define\s+DISABLE_INACTIVE_EXTRUDER\b.*$",

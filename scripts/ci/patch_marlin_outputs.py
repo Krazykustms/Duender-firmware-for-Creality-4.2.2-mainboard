@@ -43,7 +43,7 @@ def patch_version_h(path: Path, config_name: str) -> None:
 
     text = re.sub(
         rf'(SHORT_BUILD_VERSION " ){re.escape(config_name)}, based on bugfix-2\.1\.x(")',
-        r"\1Duender-422-BLTUBL-MPC-T13-beta.1 CoreXY, New-Year-2025\2",
+        r"\1Duender-422-BLTUBL-MPC-T13-beta.2 CoreXY, New-Year-2025\2",
         text,
         count=1,
     )

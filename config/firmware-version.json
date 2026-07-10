@@ -1,6 +1,6 @@
-{
+﻿{
   "channel": "beta",
-  "version": "0.1.0-beta.1",
+  "version": "0.1.0-beta.2",
   "profile": "Duender-422-BLTUBL-MPC-T13",
   "machine_name": "Duender MGN9H beta",
   "mainboard": "Creality 4.2.2 (BOARD_CREALITY_V4)",
@@ -13,13 +13,13 @@
     "Special_Configurations": "main"
   },
   "validated": {
-    "date": "2026-07-06",
-    "platform": "Windows 11, PlatformIO 6.x, short path (C:\\fw)",
+    "date": "2026-07-10",
+    "baseline": "Dual tram (manual nozzle-edge + probe-reachable auto); auto tram validated on hardware",
+    "platform": "Windows 11, PlatformIO 6.x",
     "mcu_note": "Validated for GD32F303RET6 on Creality 4.2.2 Neo via Mriscoc STM32F103RE_creality (512K env name)."
   },
   "caveats": [
-    "CI placeholder bed/travel/probe values — measure your Duender before trusting limits",
-    "Motor invert flags not set — verify after first CoreXY homing",
+    "After flash: M502 then M500, re-set Z probe offset, confirm ProUI Physical Settings",
     "Not a tagged GitHub Release yet — beta smoke-test on hardware before daily use",
     "Wrong build env (256K RC) can brick GD32 Neo boards — see docs/board-mcu.md"
   ]

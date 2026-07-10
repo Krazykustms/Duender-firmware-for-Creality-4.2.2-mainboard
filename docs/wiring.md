@@ -67,16 +67,14 @@ Duender uses **COREXY** with **both inverts true** (`INVERT_X_DIR` / `INVERT_Y_D
 | Bed travel | X0 Y0 | X201 Y235 |
 | Print / UBL mesh | X1 Y23 | X200 Y234 |
 
-**Tramming (absolute corners in `patches/bed_tramming.cpp`):**
+**Tramming (two coordinate sets in `patches/bed_tramming.cpp`):**
 
-| Corner | X | Y |
-|--------|---|---|
-| Front Left | 1 | 22 |
-| Front Right | 201 | 22 |
-| Back Right | 201 | 235 |
-| Back Left | 1 | 235 |
+| Mode | When | FL | FR | BR | BL |
+|------|------|----|----|----|----|
+| **Manual** | ProUI “Manual Tramming” ON — nozzle at screws | 1,22 | 201,22 | 201,235 | 1,235 |
+| **Auto / probe** | Manual OFF / Tramming Wizard — probe tip | 19,61 | 170,61 | 170,196 | 19,196 |
 
-After flashing, open **Control → Advanced → Physical Settings** and confirm bed/print sizes match, then store settings. Stale ProUI Physical Settings can break tram/mesh.
+Auto coords are **probe tip** positions. With `NOZZLE_TO_PROBE_OFFSET { -31, -39, 0 }`, reach is about **X 10–170, Y 10–196** — so X201 / Y230 (nozzle-edge) will report out of bounds on auto tram.
 
 ## CR Touch (BL_T port)
 

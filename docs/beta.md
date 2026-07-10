@@ -1,9 +1,9 @@
 # Beta firmware — Duender CoreXY on Creality 4.2.2
 
 **Channel:** beta  
-**Version:** `0.1.0-beta.1` (see [config/firmware-version.json](../config/firmware-version.json))  
+**Version:** `0.1.0-beta.2` (see [config/firmware-version.json](../config/firmware-version.json))  
 **Profile:** `Duender-422-BLTUBL-MPC-T13` + `Duender-CoreXY` overlay  
-**Hardware-validated baseline:** **D025** (jog, home, tram, UBL mesh)
+**Hardware-validated baseline:** **0.1.0-beta.2** (jog, home, dual tram sets, UBL mesh; auto tram probe reach fixed)
 
 ## What “beta” means here
 
@@ -24,7 +24,8 @@
 | Probe XY | `{ -31, -39, 0 }` |
 | Bed travel | 0,0 → 201,235 |
 | Print / mesh | 1,23 → 200,234 |
-| Tram corners | FL(1,22) FR(201,22) BR(201,235) BL(1,235) |
+| Tram manual | FL(1,22) FR(201,22) BR(201,235) BL(1,235) |
+| Tram auto/probe | FL(19,61) FR(170,61) BR(170,196) BL(19,196) |
 
 Absolute tram points are applied from [`patches/bed_tramming.cpp`](../patches/bed_tramming.cpp) during config generation.
 

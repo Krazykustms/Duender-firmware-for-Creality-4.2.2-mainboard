@@ -28,7 +28,7 @@ concurrency:
 env:
   CONFIG_NAME: Duender-422-BLTUBL-MPC-T13
   PIO_ENV: STM32F103RE_creality
-  FIRMWARE_VERSION: 0.1.0-beta.1
+  FIRMWARE_VERSION: 0.1.0-beta.2
   MRISCOC_FIRMWARE_REF: ${{ github.event.inputs.mriscoc_firmware_ref || 'New-Year-2025' }}
   MRISCOC_CONFIG_REF: ${{ github.event.inputs.mriscoc_config_ref || 'main' }}
 

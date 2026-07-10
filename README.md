@@ -12,7 +12,7 @@ Custom [Mriscoc Professional](https://github.com/mriscoc/Ender3V2S1) firmware fo
 
 Builds on the Mriscoc `Ender3V2-422-BLTUBL-MPC` profile + `T13` (Sprite thermistor) + `Duender-CoreXY` overlay.
 
-**Firmware channel:** **beta** `0.1.0-beta.1` — see [docs/beta.md](docs/beta.md) and [config/firmware-version.json](config/firmware-version.json). First config-complete build validated locally for **GD32F303RET6 / Creality 4.2.2 Neo** (Mriscoc env `STM32F103RE_creality` = 512K profile name only). Placeholder bed/travel values — measure your Duender before trusting limits.
+**Firmware channel:** **beta** `0.1.0-beta.2` — see [docs/beta.md](docs/beta.md) and [config/firmware-version.json](config/firmware-version.json). First config-complete build validated locally for **GD32F303RET6 / Creality 4.2.2 Neo** (Mriscoc env `STM32F103RE_creality` = 512K profile name only). Placeholder bed/travel values — measure your Duender before trusting limits.
 
 **Contributing:** see [CONTRIBUTING.md](CONTRIBUTING.md). Download CI-built `.bin` files from the [Actions](https://github.com/Krazykustms/Duender-firmware-for-Creality-4.2.2-mainboard/actions) tab (artifacts use placeholder bed dimensions until you measure yours).
 

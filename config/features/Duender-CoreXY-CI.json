@@ -1,80 +1,124 @@
-{
-  "Configuration.h": [
-    {
-      "op": "Enable",
-      "searchfor": "COREXY",
-      "comment": "Duender MGN9H CoreXY kinematics"
-    },
-    {
-      "op": "CustomVal",
-      "searchfor": "CONFIGURATION_H_VERSION",
-      "value": "02010300",
-      "comment": "Match New-Year-2025 Marlin (legacy T13 tag used 02010200)"
-    },
-    {
-      "op": "Custom",
-      "mask": "{.*}",
-      "searchfor": "DEFAULT_AXIS_STEPS_PER_UNIT",
-      "value": "{ 80, 80, 400, 424.9 }",
-      "comment": "Sprite extruder E-steps — calibrate after install"
-    },
-    {
-      "op": "Custom",
-      "mask": "{.*}",
-      "searchfor": "DEFAULT_MAX_ACCELERATION",
-      "value": "{ 3000, 3000, 100, 1000 }",
-      "comment": "Conservative CoreXY start; raise after Input Shaping"
-    },
-    {
-      "op": "CustomVal",
-      "searchfor": "INVERT_Z_DIR",
-      "value": "false",
-      "comment": "Firmware-only fix for Duender conversion: Z+ must move bed down"
-    },
-    {
-      "op": "CustomVal",
-      "searchfor": "X_BED_SIZE",
-      "value": "230",
-      "comment": "CI placeholder — replace after measuring your bed"
-    },
-    {
-      "op": "CustomVal",
-      "searchfor": "Y_BED_SIZE",
-      "value": "230",
-      "comment": "CI placeholder — replace after measuring your bed"
-    },
-    {
-      "op": "CustomVal",
-      "searchfor": "X_MAX_POS",
-      "value": "248",
-      "comment": "CI placeholder — replace after measuring travel"
-    },
-    {
-      "op": "CustomVal",
-      "searchfor": "Y_MAX_POS",
-      "value": "231",
-      "comment": "CI placeholder — replace after measuring travel"
-    },
-    {
-      "op": "CustomVal",
-      "searchfor": "Z_MAX_POS",
-      "value": "280",
-      "comment": "CI placeholder — typical Duender range; measure yours"
-    },
-    {
-      "op": "Custom",
-      "mask": "{.*}",
-      "searchfor": "NOZZLE_TO_PROBE_OFFSET",
-      "value": "{ -41.5, -7, 0 }",
-      "comment": "CI placeholder Ender mount — measure your CR Touch mount"
-    }
-  ],
-  "Configuration_adv.h": [
-    {
-      "op": "CustomVal",
-      "searchfor": "CONFIGURATION_ADV_H_VERSION",
-      "value": "02010300",
-      "comment": "Match New-Year-2025 Marlin"
-    }
-  ]
-}
+{
+  "Configuration.h": [
+    {
+      "op": "Enable",
+      "searchfor": "COREXY",
+      "comment": "Validated D025 — front-left Y switch with NORMAL motor plugs (X→X, Y→Y)"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "CONFIGURATION_H_VERSION",
+      "value": "02010300",
+      "comment": "Match New-Year-2025 Marlin (legacy T13 tag used 02010200)"
+    },
+    {
+      "op": "Custom",
+      "mask": "{.*}",
+      "searchfor": "DEFAULT_AXIS_STEPS_PER_UNIT",
+      "value": "{ 100, 100, 400, 424.9 }",
+      "comment": "CoreXY validated on hardware — 100mm jog test; Sprite E 424.9 starting point"
+    },
+    {
+      "op": "Custom",
+      "mask": "{.*}",
+      "searchfor": "DEFAULT_MAX_ACCELERATION",
+      "value": "{ 3000, 3000, 100, 1000 }",
+      "comment": "Conservative CoreXY start; raise after Input Shaping"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "INVERT_X_DIR",
+      "value": "true",
+      "comment": "Use with NORMAL motor plugs (X→X, Y→Y) and front-left Y switch"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "INVERT_Y_DIR",
+      "value": "true",
+      "comment": "Must match INVERT_X_DIR — normal plugs + Y_HOME_DIR -1 for front switch"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "X_HOME_DIR",
+      "value": "-1",
+      "comment": "X homes at the left switch"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "Y_HOME_DIR",
+      "value": "-1",
+      "comment": "Front-left Y switch — standard Marlin with normal motor plugs"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "INVERT_Z_DIR",
+      "value": "false",
+      "comment": "Firmware-only fix for Duender conversion: Z+ must move bed down"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "X_BED_SIZE",
+      "value": "200",
+      "comment": "Measured max print X"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "Y_BED_SIZE",
+      "value": "234",
+      "comment": "Measured max print Y"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "X_MAX_POS",
+      "value": "201",
+      "comment": "Measured max bed X"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "Y_MAX_POS",
+      "value": "235",
+      "comment": "Measured max bed Y"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "Z_SAFE_HOMING_X_POINT",
+      "value": "101",
+      "comment": "Probe at print-area center X ((1+200)/2)"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "Z_SAFE_HOMING_Y_POINT",
+      "value": "129",
+      "comment": "Probe at print-area center Y ((23+234)/2)"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "Z_MAX_POS",
+      "value": "280",
+      "comment": "Typical Duender Z travel — confirm on your frame"
+    },
+    {
+      "op": "Custom",
+      "mask": "{.*}",
+      "searchfor": "NOZZLE_TO_PROBE_OFFSET",
+      "value": "{ -31, -39, 0 }",
+      "comment": "Probe 31mm left, 39mm in front of nozzle (Marlin Y negative); Z via M851/LCD"
+    },
+    {
+      "op": "Custom",
+      "mask": "{.*}",
+      "searchfor": "BED_TRAMMING_INSET_LFRB",
+      "value": "{ 1, 22, 0, 0 }",
+      "comment": "Unused with absolute DUENDER_TRAM_* points — FL(1,22) FR(201,22) BR(201,235) BL(1,235)"
+    }
+  ],
+  "Configuration_adv.h": [
+    {
+      "op": "CustomVal",
+      "searchfor": "CONFIGURATION_ADV_H_VERSION",
+      "value": "02010300",
+      "comment": "Match New-Year-2025 Marlin"
+    }
+  ]
+}
+

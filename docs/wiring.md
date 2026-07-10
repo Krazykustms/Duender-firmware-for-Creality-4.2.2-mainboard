@@ -53,10 +53,30 @@ Stock Ender-3 style **NC switches to GND** (pull-up enabled in firmware).
 | Function | Typical 4.2.2 pin | Duender |
 |----------|-------------------|---------|
 | X min | PA5 | Front-left X home switch |
-| Y min | PA6 | Front-left Y home switch |
+| Y min | PA6 | **Front-left** Y home switch (move from rear for standard Marlin coords) |
 | Z min | PA7 | **Not used for homing** when CR Touch probes Z |
 
-Duender homes X and Y to **minimum** (`X_HOME_DIR -1`, `Y_HOME_DIR -1`). Confirm switch placement matches your frame corner.
+Duender uses **COREXY** with **both inverts true** (`INVERT_X_DIR` / `INVERT_Y_DIR`). With the Y switch at **front-left**, use `Y_HOME_DIR -1` and **normal motor plugs** — X motor on the **X** driver, Y motor on the **Y** driver (not swapped). Validated flash baseline: **`D025.bin`**. Do **not** flip a single motor plug 180° on CoreXY.
+
+**Probe XY offset:** `NOZZLE_TO_PROBE_OFFSET { -31, -39, 0 }` — probe is 31 mm left and 39 mm **in front** of the nozzle (negative Y in Marlin). After any probe-offset flash: `M502` then `M500`, then re-set Z offset.
+
+**Bed / print (measured D025):**
+
+| Region | Min | Max |
+|--------|-----|-----|
+| Bed travel | X0 Y0 | X201 Y235 |
+| Print / UBL mesh | X1 Y23 | X200 Y234 |
+
+**Tramming (absolute corners in `patches/bed_tramming.cpp`):**
+
+| Corner | X | Y |
+|--------|---|---|
+| Front Left | 1 | 22 |
+| Front Right | 201 | 22 |
+| Back Right | 201 | 235 |
+| Back Left | 1 | 235 |
+
+After flashing, open **Control → Advanced → Physical Settings** and confirm bed/print sizes match, then store settings. Stale ProUI Physical Settings can break tram/mesh.
 
 ## CR Touch (BL_T port)
 

@@ -231,6 +231,26 @@ def patch_configuration_adv_h(path: Path) -> None:
             1,
         )
 
+    # Measured Duender print/mesh area (overrides MESH_INSET defaults)
+    text = re.sub(
+        r"#if ANY\(MESH_BED_LEVELING, AUTO_BED_LEVELING_UBL\)\s*"
+        r"//[^\n]*\n"
+        r"\s*#define MESH_MIN_X[^\n]*\n"
+        r"\s*#define MESH_MIN_Y[^\n]*\n"
+        r"\s*#define MESH_MAX_X[^\n]*\n"
+        r"\s*#define MESH_MAX_Y[^\n]*\n"
+        r"#endif",
+        "#if ANY(MESH_BED_LEVELING, AUTO_BED_LEVELING_UBL)\n"
+        "  // Measured Duender print area (overrides MESH_INSET defaults)\n"
+        "  #define MESH_MIN_X 1\n"
+        "  #define MESH_MIN_Y 23\n"
+        "  #define MESH_MAX_X 200\n"
+        "  #define MESH_MAX_Y 234\n"
+        "#endif",
+        text,
+        count=1,
+    )
+
     path.write_text(text, encoding="utf-8")
 
 
@@ -280,6 +300,14 @@ def patch_stm32f1_ini(path: Path) -> None:
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def patch_bed_tramming(path: Path) -> None:
+    """Install Duender absolute tram corners (Front=low Y, Back=high Y)."""
+    patch_src = Path(__file__).resolve().parents[2] / "patches" / "bed_tramming.cpp"
+    if not patch_src.is_file():
+        raise FileNotFoundError(f"missing tram patch: {patch_src}")
+    path.write_text(patch_src.read_text(encoding="utf-8"), encoding="utf-8")
+
+
 def main() -> int:
     if len(sys.argv) != 3:
         print(f"usage: {sys.argv[0]} FIRMWARE_DIR CONFIG_NAME", file=sys.stderr)
@@ -295,8 +323,13 @@ def main() -> int:
         ("platformio.ini", firmware_dir / "platformio.ini", patch_platformio_ini),
         ("ui_api.cpp", firmware_dir / "Marlin/src/lcd/extui/ui_api.cpp", patch_ui_api),
         ("stm32f1.ini", firmware_dir / "ini/stm32f1.ini", patch_stm32f1_ini),
+        (
+            "bed_tramming.cpp",
+            firmware_dir / "Marlin/src/lcd/e3v2/proui/bed_tramming.cpp",
+            patch_bed_tramming,
+        ),
     ]
-    optional = {"ui_api.cpp", "stm32f1.ini"}
+    optional = {"ui_api.cpp", "stm32f1.ini", "bed_tramming.cpp"}
 
     for label, path, fn in steps:
         if not path.is_file():

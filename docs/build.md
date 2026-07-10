@@ -42,12 +42,14 @@ cd duender-config
 bash scripts/ci/generate-config.sh
 ```
 
-This copies `Duender-CoreXY-CI.json` by default (compiles without measured bed size). For your machine profile:
+This copies `Duender-CoreXY-CI.json` by default (measured D025 geometry). For the same machine profile file:
 
 ```bash
 export FEATURE_FILE="$PWD/config/features/Duender-CoreXY.json"
 bash scripts/ci/generate-config.sh
 ```
+
+Absolute tram corners are applied from `patches/bed_tramming.cpp` by `scripts/ci/patch_marlin_outputs.py`.
 
 The script also copies `Version.h`, applies Marlin 2.1.3 `ANY`/`ALL` macro updates, and sets the **512K GD32 Neo** profile in `platformio.ini` (Mriscoc env `STM32F103RE_creality` — see [board-mcu.md](board-mcu.md)).
 
@@ -71,7 +73,7 @@ Copy outputs into the firmware tree:
 
 ### CI builds
 
-Every push to `main` runs [.github/workflows/build-firmware.yml](../.github/workflows/build-firmware.yml). Download `Duender-422-BLTUBL-MPC-T13-CoreXY-0.1.0-beta.1.bin` from workflow **Artifacts**. CI uses placeholder dimensions from `Duender-CoreXY-CI.json` — flash on hardware only after you verify travel limits are safe.
+Every push to `main` runs [.github/workflows/build-firmware.yml](../.github/workflows/build-firmware.yml). Download `Duender-422-BLTUBL-MPC-T13-CoreXY-0.1.0-beta.1.bin` from workflow **Artifacts**. CI uses measured D025 dimensions from `Duender-CoreXY-CI.json` — still verify travel limits are safe on your frame before trusting a first print.
 
 ## 3. Apply manual edits
 

@@ -2,16 +2,31 @@
 
 **Channel:** beta  
 **Version:** `0.1.0-beta.1` (see [config/firmware-version.json](../config/firmware-version.json))  
-**Profile:** `Duender-422-BLTUBL-MPC-T13` + `Duender-CoreXY` overlay
-
-This is the first **config-complete, locally validated** build for Duender PIN v6 MGN9H using the Ender-3 V2 Neo donor stack (4.2.2 board, CR Touch, Sprite, DWIN ProUI).
+**Profile:** `Duender-422-BLTUBL-MPC-T13` + `Duender-CoreXY` overlay  
+**Hardware-validated baseline:** **D025** (jog, home, tram, UBL mesh)
 
 ## What “beta” means here
 
 - Config generation and PlatformIO compile succeed against current Mriscoc upstream (`New-Year-2025` + `Special_Configurations` `main`).
 - CoreXY, UBL, MPC, BLT, and T13 thermistor are enabled in the overlay.
-- Bed/travel/probe numbers are **placeholders** from `Duender-CoreXY-CI.json` until you measure your frame.
-- Treat as **experimental** until you homing-test, set motor directions, and run MPC/UBL calibration on your machine.
+- Bed/travel/probe/tram numbers in `Duender-CoreXY-CI.json` / `Duender-CoreXY.json` are **measured on a Duender PIN v6 MGN9H** (D025).
+- Still treat as **beta** until more machines confirm the same geometry; always `M502`/`M500` after flash and re-set Z probe offset.
+
+## Validated motion / geometry (D025)
+
+| Item | Value |
+|------|--------|
+| Kinematics | `COREXY` |
+| Motor plugs | Normal (X→X, Y→Y) — do not swap; do not flip one plug 180° |
+| `INVERT_X_DIR` / `INVERT_Y_DIR` | both `true` |
+| Y endstop | Front-left, `Y_HOME_DIR -1` |
+| Steps/mm | X/Y 100, Z 400, E 424.9 |
+| Probe XY | `{ -31, -39, 0 }` |
+| Bed travel | 0,0 → 201,235 |
+| Print / mesh | 1,23 → 200,234 |
+| Tram corners | FL(1,22) FR(201,22) BR(201,235) BL(1,235) |
+
+Absolute tram points are applied from [`patches/bed_tramming.cpp`](../patches/bed_tramming.cpp) during config generation.
 
 ## Build target — GD32F303RET6 Neo (Creality 4.2.2)
 
@@ -50,7 +65,7 @@ The first `pio run` may stop once to rewrite `EITHER`/`BOTH` macros in config he
 
 ## Flash
 
-1. Rename `.bin` to a **unique** name (e.g. `Duender-beta-20260706.bin`).
+1. Rename `.bin` to a **unique** name (e.g. `D025.bin`).
 2. FAT32 microSD, ≤32 GB, good card.
 3. SD root → power cycle → wait for reboot (~30 s).
 
@@ -58,15 +73,15 @@ If the display stays blank, install the matching DWIN set from the [Mriscoc wiki
 
 ## After flash (minimum)
 
-1. Confirm travel limits are safe (placeholder 230×230 mm bed).
-2. Home X/Y — fix `INVERT_X_DIR` / `INVERT_Y_DIR` if needed.
-3. MPC autotune hotend (`M306 T`), save (`M500`).
-4. CR Touch Z offset + UBL mesh.
+1. `M502` then `M500` (or LCD restore defaults + store).
+2. Confirm Physical Settings match measured bed/print sizes.
+3. Re-set CR Touch Z offset (`M851` / LCD) and `M500`.
+4. Home X/Y/Z; run tram if needed; load/enable UBL mesh (`M420 S1`).
 
 ## Promote to stable
 
 Stable release criteria (future `0.1.0`):
 
-- [ ] Measured values in `Duender-CoreXY.json` committed (no `___MEASURE___`)
-- [ ] Hardware smoke-test on at least one Duender PIN v6 build
+- [x] Measured values in `Duender-CoreXY.json` committed (no `___MEASURE___`)
+- [x] Hardware smoke-test on at least one Duender PIN v6 build (D025)
 - [ ] GitHub Release with attached `.bin` and changelog

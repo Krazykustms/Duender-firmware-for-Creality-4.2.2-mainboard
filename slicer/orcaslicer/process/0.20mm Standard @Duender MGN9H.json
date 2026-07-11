@@ -1,0 +1,21 @@
+{
+    "type": "process",
+    "name": "0.20mm Standard @Duender MGN9H",
+    "inherits": "0.20mm Standard @Creality Ender3V2Neo",
+    "from": "User",
+    "instantiation": "true",
+    "print_settings_id": "0.20mm Standard @Duender MGN9H",
+    "compatible_printers": [
+        "Duender MGN9H 0.4 nozzle"
+    ],
+    "layer_height": "0.2",
+    "initial_layer_print_height": "0.28",
+    "wall_loops": "3",
+    "sparse_infill_density": "15%",
+    "default_acceleration": "500",
+    "outer_wall_acceleration": "500",
+    "inner_wall_acceleration": "500",
+    "travel_acceleration": "2000",
+    "initial_layer_acceleration": "300",
+    "elefant_foot_compensation": "0.15"
+}

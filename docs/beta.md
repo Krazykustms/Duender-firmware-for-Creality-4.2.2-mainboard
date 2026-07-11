@@ -1,18 +1,18 @@
 # Beta firmware — Duender CoreXY on Creality 4.2.2
 
 **Channel:** beta  
-**Version:** `0.1.0-beta.2` (see [config/firmware-version.json](../config/firmware-version.json))  
+**Version:** `0.1.0-beta.3` (see [config/firmware-version.json](../config/firmware-version.json))  
 **Profile:** `Duender-422-BLTUBL-MPC-T13` + `Duender-CoreXY` overlay  
-**Hardware-validated baseline:** **0.1.0-beta.2** (jog, home, dual tram sets, UBL mesh; auto tram probe reach fixed)
+**Hardware status:** **fully functional, not tuned** — jog, home, dual tram, probe-reachable UBL, Orca profile validated on one machine
 
 ## What “beta” means here
 
 - Config generation and PlatformIO compile succeed against current Mriscoc upstream (`New-Year-2025` + `Special_Configurations` `main`).
 - CoreXY, UBL, MPC, BLT, and T13 thermistor are enabled in the overlay.
-- Bed/travel/probe/tram numbers in `Duender-CoreXY-CI.json` / `Duender-CoreXY.json` are **measured on a Duender PIN v6 MGN9H** (D025).
-- Still treat as **beta** until more machines confirm the same geometry; always `M502`/`M500` after flash and re-set Z probe offset.
+- Bed/travel/probe/tram numbers in `Duender-CoreXY-CI.json` / `Duender-CoreXY.json` are **measured on a Duender PIN v6 MGN9H**.
+- Motion quality (IS, LA, accel) and slicer centering are **not** finished — safe for bring-up and first prints, not a polished release.
 
-## Validated motion / geometry (D025)
+## Validated motion / geometry
 
 | Item | Value |
 |------|--------|
@@ -23,11 +23,12 @@
 | Steps/mm | X/Y 100, Z 400, E 424.9 |
 | Probe XY | `{ -31, -39, 0 }` |
 | Bed travel | 0,0 → 201,235 |
-| Print / mesh | 1,23 → 200,234 |
+| Print area (nozzle) | 1,23 → 200,234 |
+| UBL mesh (probe tip) | 10,23 → 170,196 |
 | Tram manual | FL(1,22) FR(201,22) BR(201,235) BL(1,235) |
 | Tram auto/probe | FL(19,61) FR(170,61) BR(170,196) BL(19,196) |
 
-Absolute tram points are applied from [`patches/bed_tramming.cpp`](../patches/bed_tramming.cpp) during config generation.
+Print area and UBL mesh are **different on purpose**: mesh must stay inside probe reach with offset `{ -31, -39 }`. Absolute tram points are applied from [`patches/bed_tramming.cpp`](../patches/bed_tramming.cpp) during config generation.
 
 ## Build target — GD32F303RET6 Neo (Creality 4.2.2)
 
@@ -66,7 +67,7 @@ The first `pio run` may stop once to rewrite `EITHER`/`BOTH` macros in config he
 
 ## Flash
 
-1. Rename `.bin` to a **unique** name (e.g. `D025.bin`).
+1. Rename `.bin` to a **unique** name (e.g. `D-beta3.bin`).
 2. FAT32 microSD, ≤32 GB, good card.
 3. SD root → power cycle → wait for reboot (~30 s).
 
@@ -77,12 +78,14 @@ If the display stays blank, install the matching DWIN set from the [Mriscoc wiki
 1. `M502` then `M500` (or LCD restore defaults + store).
 2. Confirm Physical Settings match measured bed/print sizes.
 3. Re-set CR Touch Z offset (`M851` / LCD) and `M500`.
-4. Home X/Y/Z; run tram if needed; load/enable UBL mesh (`M420 S1`).
+4. Home X/Y/Z; run tram if needed; build UBL mesh; enable with `M420 S1`.
 
-## Promote to stable
+## Slicer
 
-Stable release criteria (future `0.1.0`):
+OrcaSlicer starting point: [`slicer/orcaslicer/`](../slicer/orcaslicer/) (Custom **Duender MGN9H** / Generic Marlin base). Host baud in firmware is **250000**.
 
-- [x] Measured values in `Duender-CoreXY.json` committed (no `___MEASURE___`)
-- [x] Hardware smoke-test on at least one Duender PIN v6 build (D025)
-- [ ] GitHub Release with attached `.bin` and changelog
+## Not tuned yet
+
+- Input Shaping / Linear Advance
+- Aggressive CoreXY accel
+- Perfect slicer centering on the physical bed

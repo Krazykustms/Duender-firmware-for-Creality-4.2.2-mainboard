@@ -1,6 +1,6 @@
 # Build and flash — Mriscoc Professional for Duender
 
-**Beta:** `0.1.0-beta.2` — read [beta.md](beta.md) before flashing on hardware.
+**Beta:** `0.1.0-beta.3` — fully functional, not tuned — read [beta.md](beta.md) before flashing.
 
 ## Prerequisites
 
@@ -73,7 +73,7 @@ Copy outputs into the firmware tree:
 
 ### CI builds
 
-Every push to `main` runs [.github/workflows/build-firmware.yml](../.github/workflows/build-firmware.yml). Download `Duender-422-BLTUBL-MPC-T13-CoreXY-0.1.0-beta.2.bin` from workflow **Artifacts**. CI uses measured D025 dimensions from `Duender-CoreXY-CI.json` — still verify travel limits are safe on your frame before trusting a first print.
+Every push to `main` runs [.github/workflows/build-firmware.yml](../.github/workflows/build-firmware.yml). Download `Duender-422-BLTUBL-MPC-T13-CoreXY-0.1.0-beta.3.bin` from workflow **Artifacts**. CI uses measured geometry from `Duender-CoreXY-CI.json` (including probe-reachable UBL mesh) — verify travel limits on your frame before trusting a first print.
 
 ## 3. Apply manual edits
 

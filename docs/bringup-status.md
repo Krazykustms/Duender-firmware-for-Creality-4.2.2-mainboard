@@ -1,60 +1,46 @@
 # Bring-up status
 
-Current machine state as of early hardware bring-up.
+**Status (2026-07-11):** firmware is **fully functional** for daily bring-up and first prints — **not motion/quality tuned**.
 
 ## Summary
 
-The Duender conversion is not yet mechanically complete for CoreXY motion because the X/Y pulleys and belts have not arrived yet.
+Duender PIN v6 MGN9H CoreXY on Creality **4.2.2** (GD32 Neo) with Mriscoc ProUI is past motion bring-up. Jog, homing, tram, probe Z, UBL mesh (probe-reachable bounds), and an OrcaSlicer machine profile are working on hardware.
 
-Even so, the reused **Ender-3 V2 Neo** electronics package has already been validated with stock **Mriscoc Professional** firmware in its original cartesian setup. This is the baseline before enabling `COREXY`.
+Still open: Input Shaping, Linear Advance, accel/jerk tuning, and slicer bed centering polish.
 
 ## Confirmed working
 
-- X endstop installed and tested
-- Y endstop installed and tested
-- Bed can be raised from the screen controls
-- General motor control from the display is working
-- Extruder motor tested
-- Bed heater tested
-- Manual electronic control is functioning with Mriscoc firmware
-- Printer currently runs and responds correctly with cartesian `Ender3V2-422-BLTUBL-MPC`
-- Z direction behavior is now known for the conversion: current cartesian-style direction makes `Z+` move the bed **up**, so final Duender firmware must flip `INVERT_Z_DIR` while keeping the existing Z wiring unchanged
+- [x] CoreXY jog (correct axes / directions)
+- [x] X/Y homing (front-left endstops, normal motor plugs)
+- [x] Z / CR Touch homing (`Z_SAFE_HOMING`)
+- [x] Manual tram (nozzle at bed screws)
+- [x] Auto / probe tram (probe-reachable corners + runtime clamp)
+- [x] UBL auto mesh within probe reach (`MESH` ≈ 10–170 × 23–196)
+- [x] Measured geometry in overlays (bed/print/probe)
+- [x] OrcaSlicer **Duender MGN9H** profile (Custom / Generic Marlin base)
+- [x] First sliced smoke test (placement not centered — acceptable for now)
 
-## Not yet validated
+## Not tuned / still open
 
-- X/Y CoreXY belt path
-- X/Y pulleys installed
-- Belt tensioning
-- CoreXY motor mixing
-- Final `INVERT_X_DIR` / `INVERT_Y_DIR` values under CoreXY
-- Final travel limits
-- Final CR Touch probe offset on the Duender toolhead
+- [ ] Input Shaping (`M593` / ringing tower)
+- [ ] Linear Advance (`M900`)
+- [ ] Print / travel accel & jerk beyond conservative defaults
+- [ ] Orca bed centering vs physical bed center
+- [ ] Multi-machine confirmation of the same geometry
 
-## Why this matters
+## Validated baseline
 
-This is the safest order of operations for the conversion:
+| Item | Value |
+|------|--------|
+| Flash baseline | `0.1.0-beta.3` (see `docs/beta.md`) |
+| Motor plugs | Normal X→X, Y→Y |
+| Inverts | `INVERT_X_DIR` / `INVERT_Y_DIR` both `true` |
+| Steps/mm | X/Y 100, Z 400, E 424.9 |
+| Probe XY | `{ -31, -39, 0 }` |
+| Bed travel | 0,0 → 201,235 |
+| Print area | 1,23 → 200,234 |
+| UBL mesh | 10,23 → 170,196 (probe tip reach) |
 
-1. Prove the electronics with known-good cartesian firmware.
-2. Finish the mechanical CoreXY belt system.
-3. Switch to the Duender `COREXY` configuration.
-4. Validate homing direction and small X/Y moves.
-5. Measure final bed, travel, and probe values.
+## Recovery
 
-Passing cartesian tests means the board, display, heaters, motors, and endstops are healthy. It does **not** yet prove that CoreXY motion will be correct once the belts are installed.
-
-One useful result has already come out of bring-up, though: the final machine should **not** keep the stock Z direction. On this conversion, `Z+` currently raises the bed instead of lowering it away from the nozzle.
-
-## Next milestone
-
-After the X/Y pulleys and belts are installed:
-
-1. Flash the Duender `COREXY` build.
-2. Test `G28 X` and `G28 Y` separately.
-3. Verify `INVERT_Z_DIR` with a safe `Z+` jog before trusting probe motion.
-4. Test small jogs like `G0 X10` and `G0 Y10`.
-5. Correct motor direction if needed.
-6. Measure `X_BED_SIZE`, `Y_BED_SIZE`, `X_MAX_POS`, `Y_MAX_POS`, `Z_MAX_POS`, and `NOZZLE_TO_PROBE_OFFSET`.
-
-## Working assumption
-
-Until CoreXY motion is physically complete, the cartesian Mriscoc baseline should be treated as the known-good recovery point.
+Keep a known-good `.bin` on a spare SD (e.g. D025 / beta.2 / beta.3). After any flash: `M502` → `M500`, re-set Z offset, re-enable mesh (`M420 S1`).

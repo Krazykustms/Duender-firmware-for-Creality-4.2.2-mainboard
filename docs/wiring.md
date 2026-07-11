@@ -65,7 +65,8 @@ Duender uses **COREXY** with **both inverts true** (`INVERT_X_DIR` / `INVERT_Y_D
 | Region | Min | Max |
 |--------|-----|-----|
 | Bed travel | X0 Y0 | X201 Y235 |
-| Print / UBL mesh | X1 Y23 | X200 Y234 |
+| Print area (nozzle) | X1 Y23 | X200 Y234 |
+| UBL mesh (probe tip) | X10 Y23 | X170 Y196 |
 
 **Tramming (two coordinate sets in `patches/bed_tramming.cpp`):**
 
@@ -74,7 +75,7 @@ Duender uses **COREXY** with **both inverts true** (`INVERT_X_DIR` / `INVERT_Y_D
 | **Manual** | ProUI “Manual Tramming” ON — nozzle at screws | 1,22 | 201,22 | 201,235 | 1,235 |
 | **Auto / probe** | Manual OFF / Tramming Wizard — probe tip | 19,61 | 170,61 | 170,196 | 19,196 |
 
-Auto coords are **probe tip** positions. With `NOZZLE_TO_PROBE_OFFSET { -31, -39, 0 }`, reach is about **X 10–170, Y 10–196** — so X201 / Y230 (nozzle-edge) will report out of bounds on auto tram.
+Auto coords are **probe tip** positions and are **clamped at runtime** to `probe.min/max ± 3 mm` so ProUI Physical Settings / EEPROM can’t push FR past reach. Typical reach with `{ -31, -39, 0 }` is about **X 10–170, Y 10–196**. Mesh must use that reach — do not set UBL to the full nozzle print rectangle.
 
 ## CR Touch (BL_T port)
 

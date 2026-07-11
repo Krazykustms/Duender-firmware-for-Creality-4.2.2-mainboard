@@ -64,7 +64,7 @@ Add a one-line comment in the PR body: toolhead variant, CR Touch mount, Duender
 
 ## Upstream version policy
 
-CI pins by default (beta **`0.1.0-beta.2`**):
+CI pins by default (beta **`0.1.0-beta.3`**):
 
 | Repo | Ref | Why |
 |------|-----|-----|
@@ -77,7 +77,7 @@ Bump refs in `.github/workflows/build-firmware.yml` and [config/firmware-version
 
 ## Releases
 
-**Beta `0.1.0-beta.2`:** documented in [docs/beta.md](docs/beta.md). CI uploads artifacts; not yet a GitHub Release tag.
+**Beta `0.1.0-beta.3`:** fully functional, not tuned — [docs/beta.md](docs/beta.md). CI uploads artifacts; not yet a GitHub Release tag.
 
 Firmware binaries are **not** auto-published to GitHub Releases yet. Download build artifacts from the [Actions](https://github.com/Krazykustms/Duender-firmware-for-Creality-4.2.2-mainboard/actions) tab.
 

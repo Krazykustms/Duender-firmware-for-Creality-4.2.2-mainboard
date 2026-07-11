@@ -12,27 +12,21 @@ Custom [Mriscoc Professional](https://github.com/mriscoc/Ender3V2S1) firmware fo
 
 Builds on the Mriscoc `Ender3V2-422-BLTUBL-MPC` profile + `T13` (Sprite thermistor) + `Duender-CoreXY` overlay.
 
-**Firmware channel:** **beta** `0.1.0-beta.2` — see [docs/beta.md](docs/beta.md) and [config/firmware-version.json](config/firmware-version.json). First config-complete build validated locally for **GD32F303RET6 / Creality 4.2.2 Neo** (Mriscoc env `STM32F103RE_creality` = 512K profile name only). Placeholder bed/travel values — measure your Duender before trusting limits.
+**Firmware channel:** **beta** `0.1.0-beta.3` — **fully functional, not tuned**. See [docs/beta.md](docs/beta.md), [docs/bringup-status.md](docs/bringup-status.md), and [config/firmware-version.json](config/firmware-version.json). Validated on **GD32F303RET6 / Creality 4.2.2 Neo** (Mriscoc env `STM32F103RE_creality`). Measured bed/print/probe/tram geometry is in the overlays; motion quality (IS/LA/accel) still open.
 
-**Contributing:** see [CONTRIBUTING.md](CONTRIBUTING.md). Download CI-built `.bin` files from the [Actions](https://github.com/Krazykustms/Duender-firmware-for-Creality-4.2.2-mainboard/actions) tab (artifacts use placeholder bed dimensions until you measure yours).
+**Contributing:** see [CONTRIBUTING.md](CONTRIBUTING.md). Download CI-built `.bin` files from the [Actions](https://github.com/Krazykustms/Duender-firmware-for-Creality-4.2.2-mainboard/actions) tab.
 
 ## Current bring-up status
 
-Current state is tracked in [docs/bringup-status.md](docs/bringup-status.md).
+Tracked in [docs/bringup-status.md](docs/bringup-status.md). Short version:
 
-The printer is not mechanically complete for CoreXY yet because X/Y pulleys and belts are still pending, but the reused Ender-3 V2 Neo electronics have already been validated with stock cartesian Mriscoc firmware:
+- [x] CoreXY jog, home, tram, probe Z
+- [x] UBL mesh (probe-reachable bounds)
+- [x] OrcaSlicer Duender profile + first smoke slice
+- [ ] Input Shaping / Linear Advance / accel tuning
+- [ ] Slicer bed centering polish
 
-- [x] X and Y endstops installed and tested
-- [x] Bed can be raised/lowered from the screen controls
-- [x] Extruder motor tested
-- [x] Bed heater tested
-- [x] Manual electronic control confirmed working
-- [x] Printer boots and operates on Mriscoc `Ender3V2-422-BLTUBL-MPC` in cartesian mode
-- [ ] X/Y pulleys and belts installed
-- [ ] CoreXY motion validated with `COREXY` firmware
-- [ ] Final travel limits and probe offsets measured
-
-This is an intentional staging step: cartesian bring-up proves the board, display, heaters, motors, and endstops before switching the machine to CoreXY kinematics.
+Orca starting profiles live under [`slicer/orcaslicer/`](slicer/orcaslicer/).
 
 ## Hardware summary
 
@@ -84,7 +78,7 @@ Prebuilt binary you may already run: `Ender3V2-422-BLTUBL-MPC`. For Duender + Sp
 │   ├── Configuration.h.diff-outline.md   # What to change vs stock Mriscoc base
 │   └── features/
 │       ├── Duender-CoreXY.json             # Your measured values (___MEASURE___)
-│       └── Duender-CoreXY-CI.json          # CI-safe placeholder dimensions
+│       └── Duender-CoreXY-CI.json          # Measured geometry + probe-reachable mesh (CI)
 ├── dist/README.md             # Where local .bin builds go (gitignored)
 ├── upstream/
 │   └── Ender3V2S1/            # Mriscoc firmware git submodule

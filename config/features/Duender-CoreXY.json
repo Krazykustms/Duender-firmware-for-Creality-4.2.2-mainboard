@@ -110,6 +110,30 @@
       "searchfor": "BED_TRAMMING_INSET_LFRB",
       "value": "{ 1, 22, 0, 0 }",
       "comment": "Unused with absolute DUENDER_TRAM_* points — FL(1,22) FR(201,22) BR(201,235) BL(1,235)"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "MESH_MIN_X",
+      "value": "10",
+      "comment": "UBL probe tip min X (reachable with offset -31)"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "MESH_MIN_Y",
+      "value": "23",
+      "comment": "UBL probe tip min Y (print front; nozzle at Y62)"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "MESH_MAX_X",
+      "value": "170",
+      "comment": "UBL probe tip max X (nozzle at X201)"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "MESH_MAX_Y",
+      "value": "196",
+      "comment": "UBL probe tip max Y (nozzle at Y235)"
     }
   ],
   "Configuration_adv.h": [

@@ -1,0 +1,14 @@
+# Flash script notes for Windows ST-Link / CubeProgrammer
+# Binary: klipper-creality422-rct6-noboot.bin (No bootloader @ 0x08000000)
+#
+# CubeProgrammer:
+#   1. Connect ST-Link to 4.2.2 SWD (3V3, GND, SWDIO, SWCLK, optional NRST)
+#   2. Power board 24V or at least 5V logic as required
+#   3. Connect under reset / hardware reset
+#   4. Full chip erase
+#   5. Download file, start address 0x08000000
+#   6. Disconnect ST-Link, USB to BTT Pi, ls /dev/serial/by-id/
+#
+# Linux st-flash:
+#   st-flash --connect-under-reset erase
+#   st-flash --connect-under-reset write klipper-creality422-rct6-noboot.bin 0x08000000

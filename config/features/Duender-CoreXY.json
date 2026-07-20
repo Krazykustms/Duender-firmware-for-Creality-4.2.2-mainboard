@@ -142,6 +142,32 @@
       "searchfor": "CONFIGURATION_ADV_H_VERSION",
       "value": "02010300",
       "comment": "Match New-Year-2025 Marlin"
+    },
+    {
+      "op": "Enable",
+      "searchfor": "LIN_ADVANCE",
+      "comment": "Sprite DD Linear Advance — calibrate K with Orca PA / M900"
+    },
+    {
+      "op": "CustomVal",
+      "searchfor": "ADVANCE_K",
+      "value": "0.05",
+      "comment": "Starting K for Sprite; tune per filament then M500"
+    },
+    {
+      "op": "Enable",
+      "searchfor": "INPUT_SHAPING_X",
+      "comment": "Placeholder 40 Hz — calibrate with ringing tower / M593"
+    },
+    {
+      "op": "Enable",
+      "searchfor": "INPUT_SHAPING_Y",
+      "comment": "Placeholder 40 Hz — calibrate with ringing tower / M593"
+    },
+    {
+      "op": "Enable",
+      "searchfor": "SHAPING_MENU",
+      "comment": "ProUI / LCD input shaping controls"
     }
   ]
 }

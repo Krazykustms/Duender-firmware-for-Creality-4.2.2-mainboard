@@ -86,7 +86,9 @@ Connect to the dedicated **BLTouch** header on 4.2.2:
 | Brown / GND | GND | |
 | Red / +5V | 5V | |
 | Orange / yellow control | PB0 (`SERVO0`) | Deploy/stow |
-| White / signal | PA7 (`Z_MIN_PIN`) | Probe trigger |
+| White / signal | **PB1** (`Z_MIN_PROBE_PIN`) | Probe trigger on **BL_T** 5-pin |
+
+**Not PA7** — that is `Z_STOP_PIN` (mechanical Z endstop). Marlin `pins_CREALITY_V4.h`: `SERVO0_PIN PB0`, `Z_MIN_PROBE_PIN PB1`, `Z_STOP_PIN PA7`. Klipper: `control_pin: PB0`, `sensor_pin: ^PB1`.
 
 Firmware: `#define BLTOUCH` (already in BLTUBL base). Z homing uses probe via `Z_SAFE_HOMING` at bed center — same as stock Mriscoc CRTouch builds.
 
